@@ -1,7 +1,7 @@
 
 import s from './App.module.css'
-import { Header } from "@/common/components/Header";
 import {Routing} from "@/common/routing";
+import {Header} from "@/common/components";
 
 export const App = () => {
 
