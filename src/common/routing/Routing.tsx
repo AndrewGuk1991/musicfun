@@ -1,8 +1,10 @@
 import {Route, Routes} from "react-router"
-import {MainPage} from "../../app/MainPage.tsx";
-import {PlaylistsPage} from "@/features/playlists/ui/PlaylistsPage.tsx";
-import {ProfilePage} from "@/features/auth/ui/ProfilePage.tsx";
-import {PageNotFound} from "@/common/components/PageNotFound/PageNotFound.tsx";
+import {MainPage} from "@/app/MainPage.tsx";
+import {PlaylistsPage} from "@/features/playlists/ui";
+import {ProfilePage} from "@/features/auth/ui";
+import {PageNotFound} from "@/common/components/PageNotFound";
+import {TracksPage} from "@/features/tracks/ui";
+
 
 export const Path = {
     Main: '/',
@@ -12,9 +14,7 @@ export const Path = {
     NotFound: '*',
 } as const
 
-function TracksPage() {
-    return null;
-}
+
 
 export const Routing = () => (
     <Routes>
