@@ -48,3 +48,13 @@ export type FetchPlaylistsArgs = {
     trackId?: string
     onlyLikedByMe?: boolean
 }
+
+export type CreatePlaylistArgs = {
+    data: {
+        type: 'playlists',
+        attributes: {
+            title: string,
+            description: string
+        },
+    }
+}
