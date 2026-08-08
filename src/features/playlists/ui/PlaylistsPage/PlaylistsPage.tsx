@@ -1,5 +1,6 @@
-import {useFetchPlaylistsQuery} from "@/features/playlists/api/playlists/playlistsApi.ts";
 import s from './PlaylistsPage.module.css'
+import {useFetchPlaylistsQuery} from "@/features/playlists/api/playlists/playlistsApi.ts";
+import {CreatePlaylistForm} from "@/features/playlists/ui";
 
 export const PlaylistsPage = () => {
 
@@ -8,6 +9,7 @@ export const PlaylistsPage = () => {
     return (
         <div className={s.container}>
             <h1>Playlists page</h1>
+            <CreatePlaylistForm/>
             <div className={s.items}>
                 {data?.data.map((playlist) => {
                     return <div className={s.item} key={playlist.id}>
