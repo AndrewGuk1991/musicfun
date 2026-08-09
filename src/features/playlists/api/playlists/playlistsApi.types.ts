@@ -58,3 +58,14 @@ export type CreatePlaylistArgs = {
         },
     }
 }
+
+export type UpdatePlaylistArgs = {
+    data: {
+        type: 'playlists',
+        attributes: {
+            title: string,
+            description: string,
+            "tagIds": string[]
+        }
+    }
+}
