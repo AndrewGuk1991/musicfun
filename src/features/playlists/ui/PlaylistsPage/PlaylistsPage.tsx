@@ -11,22 +11,24 @@ import type {
     UpdatePlaylistArgs
 } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import {useState} from "react";
+import {PlaylistItem} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistItem.tsx";
 
 export const PlaylistsPage = () => {
 
-    const [editingPlaylistId, setEditingPlaylistId] = useState<string|null>(null)
+    const [editingPlaylistId, setEditingPlaylistId] = useState<string | null>(null)
 
     const {register, handleSubmit, reset} = useForm<UpdatePlaylistArgs>(
-        {defaultValues: {
-            data: {
-                type: 'playlists',
-                attributes: {
-                    tagIds: ['']
-                }
-            },
+        {
+            defaultValues: {
+                data: {
+                    type: 'playlists',
+                    attributes: {
+                        tagIds: ['']
+                    }
+                },
+            }
         }
-        }
-        )
+    )
 
 
     const {data} = useFetchPlaylistsQuery()
@@ -46,10 +48,10 @@ export const PlaylistsPage = () => {
             reset({
                 data: {
                     type: 'playlists',
-                attributes: {
-                    title: playlist.attributes.title,
-                    description: 'описание не приходит с бэка',
-                    tagIds: playlist.attributes.tags.map(t => t.id),
+                    attributes: {
+                        title: playlist.attributes.title,
+                        description: 'описание не приходит с бэка',
+                        tagIds: playlist.attributes.tags.map(t => t.id),
                     }
                 }
             })
@@ -84,18 +86,18 @@ export const PlaylistsPage = () => {
                                         <input {...register('data.attributes.title')} placeholder={'title'}/>
                                     </div>
                                     <div>
-                                        <input {...register('data.attributes.description')} placeholder={'description'} />
+                                        <input {...register('data.attributes.description')}
+                                               placeholder={'description'}/>
                                     </div>
                                     <button type={"submit"}>save</button>
-                                    <button onClick={() => editPlaylistHandler(null) }>cancel</button>
+                                    <button onClick={() => editPlaylistHandler(null)}>cancel</button>
                                 </form>
                                 :
-                                <div>
-                                    <div>title: {playlist.attributes.title}</div>
-                                    <div>userName: {playlist.attributes.user.name}</div>
-                                    <button onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>
-                                    <button onClick={() => editPlaylistHandler(playlist) }>update</button>
-                                </div>
+                                <PlaylistItem
+                                    playlist={playlist}
+                                    deletePlaylistHandler={deletePlaylistHandler}
+                                    editPlaylistHandler={editPlaylistHandler}
+                                />
 
                         }
 
