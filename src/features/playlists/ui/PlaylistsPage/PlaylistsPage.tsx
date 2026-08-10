@@ -1,17 +1,11 @@
 import s from './PlaylistsPage.module.css'
-import {
-    useDeletePlaylistMutation,
-    useFetchPlaylistsQuery,
-    useUpdatePlaylistMutation
-} from "@/features/playlists/api/playlists/playlistsApi.ts";
+import {useDeletePlaylistMutation, useFetchPlaylistsQuery} from "@/features/playlists/api/playlists/playlistsApi.ts";
 import {CreatePlaylistForm} from "@/features/playlists/ui";
-import {type SubmitHandler, useForm} from "react-hook-form";
-import type {
-    PlaylistData,
-    UpdatePlaylistArgs
-} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
+import {useForm} from "react-hook-form";
+import type {PlaylistData, UpdatePlaylistArgs} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import {useState} from "react";
 import {PlaylistItem} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistItem.tsx";
+import {EditPlaylistForm} from "@/features/playlists/ui/PlaylistsPage/EditPlaylistForm/EditPlaylistForm.tsx";
 
 export const PlaylistsPage = () => {
 
@@ -34,7 +28,7 @@ export const PlaylistsPage = () => {
     const {data} = useFetchPlaylistsQuery()
 
     const [deletePlaylist] = useDeletePlaylistMutation()
-    const [updatePlaylist] = useUpdatePlaylistMutation()
+
 
     const deletePlaylistHandler = (playlistId: string) => {
         if (confirm('Are you sure you want to delete this playlist?')) {
@@ -60,13 +54,7 @@ export const PlaylistsPage = () => {
         }
     }
 
-    const onSubmit: SubmitHandler<UpdatePlaylistArgs> = data => {
-        if (!editingPlaylistId) return
-        updatePlaylist({playlistId: editingPlaylistId, body: data}).unwrap().then(() => {
-            setEditingPlaylistId(null)
-        })
 
-    }
 
     return (
         <div className={s.container}>
@@ -81,17 +69,13 @@ export const PlaylistsPage = () => {
 
                         {
                             isEditingPlaylist ?
-                                <form onSubmit={handleSubmit(onSubmit)}>
-                                    <div>
-                                        <input {...register('data.attributes.title')} placeholder={'title'}/>
-                                    </div>
-                                    <div>
-                                        <input {...register('data.attributes.description')}
-                                               placeholder={'description'}/>
-                                    </div>
-                                    <button type={"submit"}>save</button>
-                                    <button onClick={() => editPlaylistHandler(null)}>cancel</button>
-                                </form>
+                                <EditPlaylistForm
+                                    editingPlaylistId={editingPlaylistId}
+                                    setEditingPlaylistId={setEditingPlaylistId}
+                                    editPlaylist={editPlaylistHandler}
+                                    handleSubmit={handleSubmit}
+                                    register={register}
+                                />
                                 :
                                 <PlaylistItem
                                     playlist={playlist}
