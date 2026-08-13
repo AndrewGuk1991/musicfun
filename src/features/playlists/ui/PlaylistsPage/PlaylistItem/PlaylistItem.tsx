@@ -18,15 +18,27 @@ export const PlaylistItem = ({playlist, deletePlaylistHandler, editPlaylistHandl
     const src = originalCover ? originalCover.url : defaultCover
 
     const uploadCoverHandler = (event: ChangeEvent<HTMLInputElement>) => {
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/gif"]
+
+        // const maxSize = 1024 * 1024
+
         const file = event.target.files?.length && event.target.files[0]
         if (!file) return;
+
+        if (!allowedTypes.includes(file.type)) {
+            alert('Only JPEG | PNG | GIF are allowed!')
+            return
+        }
+
+
         uploadPlaylistCover({playlistId: playlist.id, file})
     }
 
     return (
         <div>
             <img src={src} alt="cover" width={'240px'} className={s.cover}/>
-            <input type="file" onChange={uploadCoverHandler}/>
+            <input type="file" accept={'image/jpeg, image/png, image/gif'} onChange={uploadCoverHandler}/>
             <div>title: {playlist.attributes.title}</div>
             <div>userName: {playlist.attributes.user.name}</div>
             <button onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>
