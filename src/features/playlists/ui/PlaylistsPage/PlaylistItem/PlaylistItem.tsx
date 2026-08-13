@@ -21,13 +21,18 @@ export const PlaylistItem = ({playlist, deletePlaylistHandler, editPlaylistHandl
 
         const allowedTypes = ["image/jpeg", "image/png", "image/gif"]
 
-        // const maxSize = 1024 * 1024
+        const maxSize = 1024 * 1024
 
         const file = event.target.files?.length && event.target.files[0]
         if (!file) return;
 
         if (!allowedTypes.includes(file.type)) {
             alert('Only JPEG | PNG | GIF are allowed!')
+            return
+        }
+
+        if (file.size > maxSize) {
+            alert(`This file is too large! Max size is ${Math.round(maxSize/1024)} KB`)
             return
         }
 
