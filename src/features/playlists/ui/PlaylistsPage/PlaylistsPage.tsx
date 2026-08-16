@@ -27,7 +27,7 @@ export const PlaylistsPage = () => {
     )
 
 
-    const {data} = useFetchPlaylistsQuery({search})
+    const {data, isLoading} = useFetchPlaylistsQuery({search})
 
     const [deletePlaylist] = useDeletePlaylistMutation()
 
@@ -71,7 +71,7 @@ export const PlaylistsPage = () => {
                 }}
             />
             <div className={s.items}>
-
+                {!data?.data.length && !isLoading && <h2>Playlists not found</h2>}
                 {data?.data.map((playlist) => {
 
                     const isEditingPlaylist = editingPlaylistId === playlist.id
