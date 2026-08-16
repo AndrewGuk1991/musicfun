@@ -11,6 +11,8 @@ export const PlaylistsPage = () => {
 
     const [editingPlaylistId, setEditingPlaylistId] = useState<string | null>(null)
 
+    const [search, setSearch] = useState('')
+
     const {register, handleSubmit, reset} = useForm<UpdatePlaylistArgs>(
         {
             defaultValues: {
@@ -25,7 +27,7 @@ export const PlaylistsPage = () => {
     )
 
 
-    const {data} = useFetchPlaylistsQuery()
+    const {data} = useFetchPlaylistsQuery({search})
 
     const [deletePlaylist] = useDeletePlaylistMutation()
 
@@ -60,7 +62,16 @@ export const PlaylistsPage = () => {
         <div className={s.container}>
             <h1>Playlists page</h1>
             <CreatePlaylistForm/>
+            <input
+                type="search"
+                placeholder={'Search playlist by title'}
+                onChange={(e) => {
+
+                    setSearch(e.currentTarget.value)
+                }}
+            />
             <div className={s.items}>
+
                 {data?.data.map((playlist) => {
 
                     const isEditingPlaylist = editingPlaylistId === playlist.id
@@ -86,8 +97,7 @@ export const PlaylistsPage = () => {
                         }
 
                     </div>
-                })
-                }
+                })}
             </div>
         </div>
     )

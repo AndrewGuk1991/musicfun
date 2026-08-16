@@ -21,6 +21,7 @@ export const PlaylistCover = ({ images, playlistId }: Props) => {
     const [deleteCover] = useDeletePlaylistCoverMutation()
 
     const uploadCoverHandler = (event: ChangeEvent<HTMLInputElement>) => {
+
         const maxSize = 1024 * 1024 // 1 MB
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
 
