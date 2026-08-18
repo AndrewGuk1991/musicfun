@@ -18,11 +18,13 @@ export const PlaylistsPage = () => {
     const debounceSearch = useDebounceValue(search)
 
     const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(2)
 
     const {data, isLoading} = useFetchPlaylistsQuery({
         search: debounceSearch,
         pageNumber: currentPage,
-        pageSize: 4,
+        pageSize,
+
     })
 
     const {register, handleSubmit, reset} = useForm<UpdatePlaylistArgs>(
@@ -64,6 +66,11 @@ export const PlaylistsPage = () => {
         } else {
             setEditingPlaylistId(null)
         }
+    }
+
+    const changePageSizeHandler = (size: number) => {
+        setPageSize(size)
+        setCurrentPage(1)
     }
 
 
@@ -112,6 +119,8 @@ export const PlaylistsPage = () => {
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 pagesCount={data?.meta.pagesCount || 1}
+                pageSize={pageSize}
+                changePageSize={changePageSizeHandler}
             />
         </div>
     )
