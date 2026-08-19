@@ -3,7 +3,7 @@ import {useDeletePlaylistMutation, useFetchPlaylistsQuery} from "@/features/play
 import {CreatePlaylistForm} from "@/features/playlists/ui";
 import {useForm} from "react-hook-form";
 import type {PlaylistData, UpdatePlaylistArgs} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
-import {useState} from "react";
+import {type ChangeEvent, useState} from "react";
 import {PlaylistItem} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistItem.tsx";
 import {EditPlaylistForm} from "@/features/playlists/ui/PlaylistsPage/EditPlaylistForm/EditPlaylistForm.tsx";
 import {useDebounceValue} from "@/common/hooks";
@@ -73,6 +73,11 @@ export const PlaylistsPage = () => {
         setCurrentPage(1)
     }
 
+    const searchPlaylistHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.currentTarget.value)
+        setCurrentPage(1)
+    }
+
 
     return (
         <div className={s.container}>
@@ -81,10 +86,7 @@ export const PlaylistsPage = () => {
             <input
                 type="search"
                 placeholder={'Search playlist by title'}
-                onChange={(e) => {
-
-                    setSearch(e.currentTarget.value)
-                }}
+                onChange={(e) => searchPlaylistHandler(e)}
             />
             <div className={s.items}>
                 {!data?.data.length && !isLoading && <h2>Playlists not found</h2>}
