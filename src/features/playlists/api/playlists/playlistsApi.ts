@@ -15,7 +15,7 @@ export const playlistsApi = baseApi.injectEndpoints({
                 url: `playlists`,
                 params
             }),
-            providesTags: ['Playlist']
+            providesTags: ['Playlist'],
         }),
         createPlaylist: build.mutation<{data: PlaylistData}, CreatePlaylistArgs>({
             query: body => ({

@@ -13,6 +13,5 @@ export const baseApi = createApi({
             return headers
         },
     }),
-
     endpoints: () => ({})
 })
