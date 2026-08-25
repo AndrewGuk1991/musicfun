@@ -1,4 +1,4 @@
-import {baseApi} from "@/app/baseApi.ts";
+import {baseApi} from "../../../app/api/baseApi.ts";
 import type {MeResponse} from "@/features/auth/api/authApi.types.ts";
 
 
