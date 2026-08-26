@@ -4,8 +4,9 @@ import type {
     PlaylistsResponse,
     UpdatePlaylistArgs
 } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
-import {baseApi} from "../../../../app/api/baseApi.ts";
+
 import type {Images} from "@/common/types";
+import {baseApi} from "@/app/api/baseApi.ts";
 
 
 export const playlistsApi = baseApi.injectEndpoints({
