@@ -21,7 +21,6 @@ export const useGlobalLoading = () => {
                 return completedQueries.length > 0
             }
 
-            return query.endpointName !== playlistsApi.endpoints.fetchPlaylists.name
         })
 
         const hasActiveMutations = mutations.some(mutation => mutation?.status === 'pending')
