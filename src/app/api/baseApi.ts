@@ -27,6 +27,9 @@ export const baseApi = createApi({
                 case 404:
                     toast((result.error.data as { error: string }).error, { type: 'error', theme: 'colored' })
                     break
+                default:
+                    toast('Some error occurred', { type: 'error', theme: 'colored' })
+
             }
         }
 
