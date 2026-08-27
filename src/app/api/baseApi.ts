@@ -11,7 +11,7 @@ export const baseApi = createApi({
         const result = await fetchBaseQuery({
             baseUrl: import.meta.env.VITE_BASE_URL,
             headers: {
-                'API-KEY': import.meta.env.VITE_API_KEY,
+                'API-KEY': import.meta.env.VITE_API_KEY + 'fgdfd',
             },
             prepareHeaders: headers => {
                 headers.set('Authorization', `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`)
@@ -26,6 +26,10 @@ export const baseApi = createApi({
                     break
                 case 404:
                     toast((result.error.data as { error: string }).error, { type: 'error', theme: 'colored' })
+                    break
+                case 429:
+                    // ✅ 1. Type Assertions
+                    toast((result.error.data as { message: string }).message, { type: 'error', theme: 'colored' })
                     break
                 default:
                     toast('Some error occurred', { type: 'error', theme: 'colored' })
