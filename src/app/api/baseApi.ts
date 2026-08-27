@@ -28,8 +28,9 @@ export const baseApi = createApi({
                     toast((result.error.data as { error: string }).error, { type: 'error', theme: 'colored' })
                     break
                 case 429:
-                    // ✅ 1. Type Assertions
-                    toast((result.error.data as { message: string }).message, { type: 'error', theme: 'colored' })
+                    // toast((result.error.data as { message: string }).message, { type: 'error', theme: 'colored' })
+                    // ✅ 2. JSON.stringify
+                    toast(JSON.stringify(result.error.data), { type: 'error', theme: 'colored' })
                     break
                 default:
                     toast('Some error occurred', { type: 'error', theme: 'colored' })
