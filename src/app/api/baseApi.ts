@@ -1,5 +1,7 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {toast} from "react-toastify";
+import {isErrorWithMessage} from "@/common/utils";
+
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
@@ -11,7 +13,7 @@ export const baseApi = createApi({
         const result = await fetchBaseQuery({
             baseUrl: import.meta.env.VITE_BASE_URL,
             headers: {
-                'API-KEY': import.meta.env.VITE_API_KEY + 'fgdfd',
+                'API-KEY': import.meta.env.VITE_API_KEY + 'gfg',
             },
             prepareHeaders: headers => {
                 headers.set('Authorization', `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`)
@@ -29,8 +31,12 @@ export const baseApi = createApi({
                     break
                 case 429:
                     // toast((result.error.data as { message: string }).message, { type: 'error', theme: 'colored' })
-                    // ✅ 2. JSON.stringify
-                    toast(JSON.stringify(result.error.data), { type: 'error', theme: 'colored' })
+                    // toast(JSON.stringify(result.error.data), { type: 'error', theme: 'colored' })
+                    if (isErrorWithMessage(result.error.data)) {
+                        toast(result.error.data.message, { type: 'error', theme: 'colored' })
+                    } else {
+                        toast(JSON.stringify(result.error.data), { type: 'error', theme: 'colored' })
+                    }
                     break
                 default:
                     toast('Some error occurred', { type: 'error', theme: 'colored' })
