@@ -23,6 +23,9 @@ export const baseApi = createApi({
 
         if (result.error) {
             switch (result.error.status) {
+                case 'FETCH_ERROR':
+                case 'PARSING_ERROR':
+                case 'CUSTOM_ERROR':
                 case 'TIMEOUT_ERROR':
                     toast(result.error.error)
                     break
