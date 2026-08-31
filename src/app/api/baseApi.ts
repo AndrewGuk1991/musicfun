@@ -27,7 +27,7 @@ export const baseApi = createApi({
                 case 'PARSING_ERROR':
                 case 'CUSTOM_ERROR':
                 case 'TIMEOUT_ERROR':
-                    toast(result.error.error)
+                    toast(result.error.error, {type: 'error', theme: 'colored'});
                     break
                 case 404:
                     if (isErrorWithProperty(result.error.data, 'error')) {
