@@ -36,6 +36,7 @@ export const baseApi = createApi({
                         toast(JSON.stringify(result.error.data), { type: 'error', theme: 'colored' })
                     }
                     break
+                case 401:
                 case 429:
                     if (isErrorWithProperty(result.error.data, 'message')) {
                         toast(result.error.data.message, { type: 'error', theme: 'colored' })
