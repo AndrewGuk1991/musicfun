@@ -1,5 +1,6 @@
 import type {
-    CreatePlaylistArgs, FetchPlaylistsArgs,
+    CreatePlaylistArgs,
+    FetchPlaylistsArgs,
     PlaylistData,
     PlaylistsResponse,
     UpdatePlaylistArgs
@@ -18,7 +19,7 @@ export const playlistsApi = baseApi.injectEndpoints({
             }),
             providesTags: ['Playlist'],
         }),
-        createPlaylist: build.mutation<{data: PlaylistData}, CreatePlaylistArgs>({
+        createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
             query: body => ({
                 url: 'playlists',
                 method: 'post',
@@ -33,15 +34,47 @@ export const playlistsApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Playlist']
         }),
-        updatePlaylist: build.mutation<void, {playlistId: string, body: UpdatePlaylistArgs}>({
+        updatePlaylist: build.mutation<void, { playlistId: string, body: UpdatePlaylistArgs }>({
             query: ({playlistId, body}) => ({
                 url: `playlists/${playlistId}`,
                 method: 'put',
                 body
             }),
+            onQueryStarted: async ({playlistId, body}, {queryFulfilled, dispatch, getState}) => {
+
+                const args = playlistsApi.util.selectCachedArgsForQuery(getState(), 'fetchPlaylists')
+
+                const patchCollections: any[] = []
+
+                args.forEach(arg => {
+                    patchCollections.push(dispatch(
+                        playlistsApi.util.updateQueryData(
+                            'fetchPlaylists',
+                            {
+                                pageNumber: arg.pageNumber,
+                                pageSize: arg.pageSize,
+                                search: arg.search},
+                            (state) => {
+                                const index = state.data.findIndex(playlist => playlist.id === playlistId)
+                                if (index !== -1) {
+                                    state.data[index].attributes = {...state.data[index].attributes, ...body.data.attributes}
+                                }
+                            }
+                        )
+                    ))
+                })
+
+                try {
+                    await queryFulfilled
+                } catch (e) {
+                    patchCollections.forEach(patchCollection => {
+                        patchCollection.undo()
+                    })
+                }
+            },
             invalidatesTags: ['Playlist']
         }),
-        uploadPlaylistCover: build.mutation<Images, {playlistId: string, file: File}>({
+        uploadPlaylistCover: build.mutation<Images, { playlistId: string, file: File }>({
             query: ({playlistId, file}) => {
                 const formData = new FormData()
 
@@ -55,13 +88,20 @@ export const playlistsApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ['Playlist']
         }),
-        deletePlaylistCover: build.mutation<void, {playlistId: string}>({
+        deletePlaylistCover: build.mutation<void, { playlistId: string }>({
             query: ({playlistId}) => ({url: `playlists/${playlistId}/images/main`, method: 'delete'}),
             invalidatesTags: ['Playlist']
         }),
     })
 })
 
-export const {useFetchPlaylistsQuery, useCreatePlaylistMutation, useDeletePlaylistMutation, useUpdatePlaylistMutation, useUploadPlaylistCoverMutation, useDeletePlaylistCoverMutation} = playlistsApi
+export const {
+    useFetchPlaylistsQuery,
+    useCreatePlaylistMutation,
+    useDeletePlaylistMutation,
+    useUpdatePlaylistMutation,
+    useUploadPlaylistCoverMutation,
+    useDeletePlaylistCoverMutation
+} = playlistsApi
 
 
