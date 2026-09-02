@@ -9,7 +9,6 @@ import type {
 import type {Images} from "@/common/types";
 import {baseApi} from "@/app/api/baseApi.ts";
 
-
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
