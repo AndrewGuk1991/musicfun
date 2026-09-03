@@ -4,6 +4,8 @@ import { NavLink } from 'react-router'
 
 import s from './Header.module.css'
 import {Path} from "@/common/routing";
+import {useGetMeQuery} from "@/features/auth/api/authApi.ts";
+import {Login} from "@/features/auth/ui";
 
 
 export const Header = () => {
@@ -15,6 +17,7 @@ export const Header = () => {
         { to: Path.Profile, label: 'Profile' },
     ]
 
+    const {data} = useGetMeQuery()
 
     return (
         <header className={s.container}>
@@ -32,6 +35,8 @@ export const Header = () => {
                     ))}
                 </ul>
             </nav>
+            {data && data.login}
+            {!data && <Login/>}
         </header>
     )
 }
