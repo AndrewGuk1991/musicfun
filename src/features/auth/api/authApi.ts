@@ -21,8 +21,20 @@ export const authApi = baseApi.injectEndpoints({
 
                 dispatch(authApi.util.invalidateTags(['Auth']))
             }
+        }),
+        logout: build.mutation<void, void>({
+            query: () => {
+                const refreshToken = localStorage.getItem(AUTH_KEYS.refreshToken)
+                return {method: 'post', url: 'auth/logout', body: {refreshToken}}
+            },
+            onQueryStarted: async (_args, {dispatch, queryFulfilled}) => {
+                await queryFulfilled
+                localStorage.removeItem(AUTH_KEYS.accessToken)
+                localStorage.removeItem(AUTH_KEYS.refreshToken)
+                dispatch(baseApi.util.resetApiState())
+            }
         })
     })
 })
 
-export const {useGetMeQuery, useLoginMutation} = authApi
+export const {useGetMeQuery, useLoginMutation, useLogoutMutation} = authApi
