@@ -8,7 +8,7 @@ export const OAuthCallback = () => {
         const code = url.searchParams.get('code')
 
         if (code && window.opener) {
-            window.opener.postMessage({ code }, '*')
+            window.opener.postMessage({ code }, window.location.origin)
         }
 
         window.close()
@@ -16,3 +16,4 @@ export const OAuthCallback = () => {
 
     return <p>Logging you in...</p>
 }
+
