@@ -13,6 +13,6 @@ export type LoginResponse = {
 export type LoginArgs = {
     code: string
     redirectUri: string
-    accessToken?: string
+    accessTokenTTL?: string
     rememberMe: boolean
 }
