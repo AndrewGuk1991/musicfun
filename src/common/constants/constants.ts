@@ -1,5 +1,5 @@
 
 export const AUTH_KEYS = {
-    accessToken: 'accessToken',
-    refreshToken: 'refreshToken',
+    accessToken: 'musicfun-access-token',
+    refreshToken: 'musicfun-refresh-token',
 } as const
