@@ -2,7 +2,6 @@ import {useLoginMutation} from "@/features/auth/api/authApi.ts";
 import {Path} from "@/common/routing";
 
 export const Login = () => {
-
     const [login] = useLoginMutation()
 
     const loginHandler = () => {
@@ -13,28 +12,28 @@ export const Login = () => {
 
         window.open(url, 'oauthPopup', 'width=500, height=600')
 
-        const receiveMessage = (event: MessageEvent) => {
+        const receiveMessage = async (event: MessageEvent) => {
             if (event.origin !== import.meta.env.VITE_DOMAIN_ADDRESS) {
-                console.warn('origin not match')
+                console.warn(`[OAuth] Ignored message from unauthorized origin: ${event.origin}`)
                 return
             }
 
-            const {code} = event.data
+            const { code } = event.data
             if (!code) {
-                console.warn('no code in message')
+                console.warn('[OAuth] Message received, but authorization code is missing')
                 return
             }
 
             window.removeEventListener('message', receiveMessage)
-
-            login({code, redirectUri, rememberMe: false})
+            login({ code, redirectUri, rememberMe: false })
         }
 
         window.addEventListener('message', receiveMessage)
-
     }
 
     return (
-        <button type={'button'} onClick={loginHandler}>login</button>
+        <button type={'button'} onClick={loginHandler}>
+            login
+        </button>
     )
 }
