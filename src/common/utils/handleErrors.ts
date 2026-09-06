@@ -4,8 +4,6 @@ import {isErrorWithDetailArray} from "@/common/utils/isErrorWithDetailArray.ts";
 import {trimToMaxLength} from "@/common/utils/trimToMaxLength.ts";
 import {isErrorWithProperty} from "@/common/utils/isErrorWithProperty.ts";
 
-
-
 export const handleErrors = (error: FetchBaseQueryError) => {
     if (error) {
         switch (error.status) {
@@ -17,6 +15,14 @@ export const handleErrors = (error: FetchBaseQueryError) => {
                 break
 
             case 400:
+                if (isErrorWithDetailArray(error.data)) {
+                    const errorMessage = error.data.errors[0].detail
+                    if (errorMessage.includes('refresh')) return
+                    errorToast(trimToMaxLength(error.data.errors[0].detail))
+                } else {
+                    errorToast(JSON.stringify(error.data))
+                }
+                break
             case 403:
                 if (isErrorWithDetailArray(error.data)) {
                     errorToast(trimToMaxLength(error.data.errors[0].detail))
