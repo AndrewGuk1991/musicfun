@@ -1,40 +1,18 @@
+import * as z from "zod";
+import {
+    createPlaylistSchema,
+    playlistAttributesSchema,
+    playlistDataSchema,
+    type playlistMetaSchema, playlistsResponseSchema
+} from "@/features/playlists/model/playlists.schemas.ts";
 
+export type PlaylistsResponse = z.infer<typeof playlistsResponseSchema>
 
-import type {CurrentUserReaction, Images, Tag, User} from "@/common/types";
+export type PlaylistData = z.infer<typeof playlistDataSchema>
 
+export type PlaylistMeta = z.infer<typeof playlistMetaSchema>
 
-export type PlaylistsResponse = {
-    data: PlaylistData[]
-    meta: PlaylistMeta
-}
-
-export type PlaylistData = {
-    id: string
-    type: 'playlists'
-    attributes: PlaylistAttributes
-}
-
-export type PlaylistMeta = {
-    page: number
-    pageSize: number
-    totalCount: number
-    pagesCount: number
-}
-
-export type PlaylistAttributes = {
-    title: string
-    addedAt: string
-    updatedAt: string
-    order: number
-    user: User
-    images: Images
-    tags: Tag[]
-    currentUserReaction: CurrentUserReaction
-    likesCount: number
-    dislikesCount: number
-    tracksCount: number
-    duration: number
-}
+export type PlaylistAttributes = z.infer<typeof playlistAttributesSchema>
 
 // Arguments
 export type FetchPlaylistsArgs = {
@@ -50,13 +28,7 @@ export type FetchPlaylistsArgs = {
 }
 
 export type CreatePlaylistArgs = {
-    data: {
-        type: 'playlists',
-        attributes: {
-            title: string,
-            description: string
-        },
-    }
+    data: z.infer<typeof createPlaylistSchema>
 }
 
 export type UpdatePlaylistArgs = {
