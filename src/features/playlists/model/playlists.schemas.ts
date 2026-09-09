@@ -2,14 +2,17 @@ import * as z from "zod";
 import {currentUserReactionSchema, imagesSchema, tagSchema, userSchema} from "@/common/schemas";
 
 export const createPlaylistSchema = z.object({
-  type: z.literal('playlists'),
-    attributes: z.object({
-        title: z
-            .string()
-            .min(1, 'The title length must be more than 1 character')
-            .max(100, 'The title length must be less than 100 characters')
-        ,
-        description: z.string().max(1000, 'The description length must be less than 1000 characters.')
+    data: z.object({
+        type: z.literal('playlists'),
+        attributes: z.object({
+            title: z
+                .string()
+                .min(1, 'The title length must be more than 1 character')
+                .max(100, 'The title length must be less than 100 characters'),
+            description: z
+                .string()
+                .max(1000, 'The description length must be less than 1000 characters.')
+        })
     })
 })
 
@@ -44,4 +47,8 @@ export const playlistDataSchema = z.object({
 export const playlistsResponseSchema = z.object({
     data: z.array(playlistDataSchema),
     meta: playlistMetaSchema,
+})
+
+export const playlistCreateResponseSchema = z.object({
+    data: playlistDataSchema,
 })
