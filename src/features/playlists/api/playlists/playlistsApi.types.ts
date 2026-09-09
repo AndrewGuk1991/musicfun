@@ -14,6 +14,9 @@ export type PlaylistMeta = z.infer<typeof playlistMetaSchema>
 
 export type PlaylistAttributes = z.infer<typeof playlistAttributesSchema>
 
+export type CreatePlaylistArgs = z.infer<typeof createPlaylistSchema>
+
+
 // Arguments
 export type FetchPlaylistsArgs = {
     pageNumber?: number
@@ -27,9 +30,7 @@ export type FetchPlaylistsArgs = {
     onlyLikedByMe?: boolean
 }
 
-export type CreatePlaylistArgs = {
-    data: z.infer<typeof createPlaylistSchema>
-}
+
 
 export type UpdatePlaylistArgs = {
     data: {
