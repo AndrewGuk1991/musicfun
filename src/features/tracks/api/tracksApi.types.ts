@@ -1,66 +1,22 @@
-import type {CurrentUserReaction, Images, User} from '@/common/types'
 
-export type FetchTracksResponse = {
-    data: TrackData[]
-    included: TracksIncluded[]
-    meta: TracksMeta
-}
+import {
+    type fetchTracksResponseSchema, trackAttachmentSchema, trackAttributesSchema,
+    trackDataSchema, trackRelationshipsSchema,
+    tracksIncludedSchema, tracksMetaSchema
+} from "@/features/tracks/model/tracks.schemas.ts";
+import * as z from "zod";
 
-export type TrackData = {
-    id: string
-    type: 'tracks'
-    attributes: TrackAttributes
-    relationships: TrackRelationships
-}
+export type FetchTracksResponse = z.infer<typeof fetchTracksResponseSchema>
 
-export type TracksIncluded = {
-    id: string
-    type: 'artists'
-    attributes: {
-        name: string
-    }
-}
+export type TrackData = z.infer<typeof trackDataSchema>
 
-export type TracksMeta = {
-    nextCursor: string | null
-    page: number
-    pageSize: number
-    totalCount: number | null
-    pagesCount: number | null
-}
+export type TracksIncluded = z.infer<typeof tracksIncludedSchema>
 
-export type TrackAttributes = {
-    title: string
-    addedAt: string
-    likesCount: number
-    attachments: TrackAttachment[]
-    images: Images
-    user: User
-    currentUserReaction: CurrentUserReaction
-    isPublished: boolean
-    publishedAt: string
-    duration: number
-}
+export type TracksMeta = z.infer<typeof tracksMetaSchema>
+export type TrackAttributes = z.infer<typeof trackAttributesSchema>
+export type TrackRelationships = z.infer<typeof trackRelationshipsSchema>
 
-export type TrackRelationships = {
-    artists: {
-        data: {
-            id: string
-            type: string
-        }
-    }
-}
-
-export type TrackAttachment = {
-    id: string
-    addedAt: string
-    updatedAt: string
-    version: number
-    url: string
-    contentType: string
-    originalName: string
-    fileSize: number
-}
+export type TrackAttachment = z.infer<typeof trackAttachmentSchema>
 
 // Arguments
 export type FetchTracksArgs = {
