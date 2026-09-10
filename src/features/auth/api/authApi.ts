@@ -1,5 +1,5 @@
 import {baseApi} from "@/app/api/baseApi";
-import type {LoginArgs, LoginResponse} from "@/features/auth/api/authApi.types.ts";
+import type {LoginArgs} from "@/features/auth/api/authApi.types.ts";
 import {AUTH_KEYS} from "@/common/constants";
 import {withZodCatch} from "@/common/utils";
 import {loginResponseSchema, meResponseSchema} from "@/features/auth/model/api.schemas.ts";
@@ -11,8 +11,8 @@ export const authApi = baseApi.injectEndpoints({
             ...withZodCatch(meResponseSchema),
             providesTags: ['Auth']
         }),
-        login: build.mutation<LoginResponse, LoginArgs>({
-            query: (payload) => ({
+        login: build.mutation({
+            query: (payload: LoginArgs) => ({
                 method: 'post',
                 url: 'auth/login',
                 body: {...payload, accessTokenTTL: '10m'},
