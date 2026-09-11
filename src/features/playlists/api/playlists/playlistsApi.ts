@@ -16,6 +16,7 @@ export const playlistsApi = baseApi.injectEndpoints({
         fetchPlaylists: build.query({
             query: (params: FetchPlaylistsArgs) => ({url: `playlists`, params}),
             ...withZodCatch(playlistsResponseSchema),
+            keepUnusedDataFor: 0,
             onCacheEntryAdded: async (_arg, {cacheDataLoaded, updateCachedData, cacheEntryRemoved}) => {
 
                 await cacheDataLoaded
