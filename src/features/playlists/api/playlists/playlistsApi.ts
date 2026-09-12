@@ -1,16 +1,17 @@
 import type {
     CreatePlaylistArgs,
-    FetchPlaylistsArgs, PlaylistCreatedEvent,
+    FetchPlaylistsArgs,
+    PlaylistCreatedEvent, PlaylistUpdateEvent,
     UpdatePlaylistArgs
 } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
-
 import type {Images} from "@/common/types";
 import {baseApi} from "@/app/api/baseApi.ts";
 import {playlistCreateResponseSchema, playlistsResponseSchema} from "@/features/playlists/model/playlists.schemas.ts";
 import {withZodCatch} from "@/common/utils";
 import {imagesSchema} from "@/common/schemas";
-import {io, Socket} from "socket.io-client";
 import {SOCKET_EVENTS} from "@/common/constants";
+import {subscribeToEvent} from "@/common/socket";
+
 
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -22,26 +23,30 @@ export const playlistsApi = baseApi.injectEndpoints({
 
                 await cacheDataLoaded
 
-                const socket: Socket = io(import.meta.env.VITE_SOCKET_URL, {
-                    path: '/api/1.0/ws',
-                    transports: ['websocket'],
-                })
-
-                socket.on('connect', () => console.log('Connected server'))
-
-                socket.on(SOCKET_EVENTS.PLAYLIST_CREATED, (msg: PlaylistCreatedEvent) => {
-                    const newPlaylist = msg.payload.data
-                    updateCachedData((state) => {
-                        state.data.pop()
-                        state.data.unshift(newPlaylist)
-                        state.meta.totalCount = state.meta.totalCount + 1
-                        state.meta.pagesCount = Math.ceil(state.meta.totalCount / state.meta.pageSize)
+                const unsubscribes = [
+                    subscribeToEvent<PlaylistCreatedEvent>(SOCKET_EVENTS.PLAYLIST_CREATED, (msg) => {
+                        const newPlaylist = msg.payload.data
+                        updateCachedData((state) => {
+                            state.data.pop()
+                            state.data.unshift(newPlaylist)
+                            state.meta.totalCount = state.meta.totalCount + 1
+                            state.meta.pagesCount = Math.ceil(state.meta.totalCount / state.meta.pageSize)
+                        })
+                    }),
+                    subscribeToEvent<PlaylistUpdateEvent>(SOCKET_EVENTS.PLAYLIST_UPDATED, (msg) => {
+                        const newPlaylist = msg.payload.data
+                        updateCachedData((state) => {
+                            const index = state.data.findIndex(playlist => playlist.id === newPlaylist.id)
+                            if (index !== -1) {
+                                state.data[index] = {...state.data[index], ...newPlaylist}
+                            }
+                        })
                     })
-                })
+                ]
 
                 await cacheEntryRemoved
 
-                socket.on('disconnect', () => console.log('Connected destroyed'))
+                unsubscribes.forEach(unsubscribe => unsubscribe())
             },
             providesTags: ['Playlist'],
         }),
@@ -80,7 +85,8 @@ export const playlistsApi = baseApi.injectEndpoints({
                             {
                                 pageNumber: arg.pageNumber,
                                 pageSize: arg.pageSize,
-                                search: arg.search},
+                                search: arg.search
+                            },
                             (state) => {
                                 const index = state.data.findIndex(playlist => playlist.id === playlistId)
                                 if (index !== -1) {
