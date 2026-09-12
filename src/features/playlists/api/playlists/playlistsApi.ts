@@ -10,6 +10,7 @@ import {playlistCreateResponseSchema, playlistsResponseSchema} from "@/features/
 import {withZodCatch} from "@/common/utils";
 import {imagesSchema} from "@/common/schemas";
 import {io, Socket} from "socket.io-client";
+import {SOCKET_EVENTS} from "@/common/constants";
 
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -28,7 +29,7 @@ export const playlistsApi = baseApi.injectEndpoints({
 
                 socket.on('connect', () => console.log('Connected server'))
 
-                socket.on('tracks.playlist-created', (msg: PlaylistCreatedEvent) => {
+                socket.on(SOCKET_EVENTS.PLAYLIST_CREATED, (msg: PlaylistCreatedEvent) => {
                     const newPlaylist = msg.payload.data
                     updateCachedData((state) => {
                         state.data.pop()
