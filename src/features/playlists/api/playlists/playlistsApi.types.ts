@@ -49,3 +49,10 @@ export type PlaylistCreatedEvent = {
         data: PlaylistData
     }
 }
+
+export type PlaylistUpdateEvent = {
+    type: 'tracks.playlist-updated'
+    payload: {
+        data: PlaylistData
+    }
+}
