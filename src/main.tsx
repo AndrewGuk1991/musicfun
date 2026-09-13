@@ -4,6 +4,7 @@ import {App} from "./app/ui/App/App.tsx";
 import {BrowserRouter} from "react-router";
 import {Provider} from "react-redux";
 import {store} from "./app/model/store.ts";
+import 'virtual:svg-icons-register'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
