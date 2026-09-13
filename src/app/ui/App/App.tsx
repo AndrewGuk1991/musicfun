@@ -1,8 +1,10 @@
 import s from './App.module.css'
 import {ToastContainer} from "react-toastify";
-import {Header, LinearProgress} from "@/common/components";
+import {LinearProgress} from "@/common/components";
 import {Routing} from "@/common/routing";
 import {useGlobalLoading} from "@/common/hooks";
+import {Header, Sidebar} from "@/app/ui";
+
 
 export const App = () => {
 
@@ -14,7 +16,10 @@ export const App = () => {
             <Header/>
             {isGlobalLoading && <LinearProgress/>}
             <div className={s.layout}>
-                <Routing/>
+                <Sidebar />
+                <main className={s.content}>
+                    <Routing />
+                </main>
             </div>
             <ToastContainer/>
         </>

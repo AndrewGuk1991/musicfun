@@ -1,6 +1,27 @@
 
 
 .layout {
-    max-width: 1186px;
-    margin: 0 auto 200px;
+    /*max-width: 1186px;*/
+    /*margin: 0 auto 200px;*/
+
+    display: flex;
+    flex-direction: row;
+    min-height: calc(100vh - 60px);
+}
+
+.content {
+    flex-grow: 1;
+    padding: 24px;
+}
+
+
+@media (max-width: 767px) {
+    .layout {
+        flex-direction: column; /* Элементы встают друг под друга */
+    }
+
+    .content {
+        padding: 16px;
+        margin-bottom: 70px; /* Делаем отступ снизу, чтобы контент не перекрывался прижатым сайдбаром */
+    }
 }
