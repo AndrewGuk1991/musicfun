@@ -1,7 +1,106 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 
+:root {
+
+  --color-orange-500: #f49800;
+  --color-orange-400: #f4aa31;
+  --color-orange-300: #f4b855;
+  --color-orange-200: #f4c67a;
+  --color-orange-100: #ffe0ad;
+  --color-orange-50: #fff4e0;
+  --color-orange-600: #cc7f00;
+  --color-orange-700: #965e00;
+  --color-orange-800: #734700;
+  --color-orange-900: #4d3000;
+
+  --color-blue-500: #00ade7;
+  --color-blue-400: #23b6e7;
+  --color-blue-300: #45bee7;
+  --color-blue-200: #68c7e7;
+  --color-blue-100: #8bd0e7;
+  --color-blue-50: #ccf2ff;
+  --color-blue-600: #008fbf;
+  --color-blue-700: #007399;
+  --color-blue-800: #005673;
+  --color-blue-900: #00394d;
+
+  --color-crimson-900: #591f27;
+  --color-crimson-800: #7d2b37;
+  --color-crimson-700: #9e3646;
+  --color-crimson-600: #c24356;
+  --color-crimson-500: #e95067;
+  --color-crimson-400: #e85a70;
+  --color-crimson-300: #e9697c;
+  --color-crimson-200: #e98c9a;
+  --color-crimson-100: #e9afb8;
+  --color-crimson-50: #ffd9de;
+
+  --color-green-900: #175730;
+  --color-green-800: #217d46;
+  --color-green-700: #2ba35b;
+  --color-green-600: #35c970;
+  --color-green-500: #3fef85;
+  --color-green-400: #56ef93;
+  --color-green-300: #6eefa2;
+  --color-green-200: #86efb0;
+  --color-green-100: #9eefbe;
+  --color-green-50: #dbffea;
+
+  --color-gray-900: #0d0d0d;
+  --color-gray-800: #333;
+  --color-gray-700: #4d4d4d;
+  --color-gray-600: #666;
+  --color-gray-500: #808080;
+  --color-gray-400: #999;
+  --color-gray-300: #b3b3b3;
+  --color-gray-200: #ccc;
+  --color-gray-100: #e6e6e6;
+  --color-gray-50: #f2f2f2;
+
+  --color-dark-dark: #121212;
+  --color-light-light: #fff;
+}
+
+body, html, input, button, select, textarea {
+  line-height: 1.5;
+  margin: 0;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  background-color: var(--color-dark-dark);
+  color: var(--color-light-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+strong, .semibold-text {
+  font-weight: 700;
+}
+
+.extrabold-text {
+  font-weight: 900;
+}
+
+.app-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--color-gray-400);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-nav-link:hover {
+  background-color: var(--color-gray-800);
+  color: var(--color-light-light);
+}
+
+.app-nav-link-active {
+  background-color: var(--color-orange-500);
+  color: var(--color-dark-dark) !important;
+  font-weight: 700;
+}
