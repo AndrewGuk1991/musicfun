@@ -1,12 +1,12 @@
 import {baseApi} from "@/app/api/baseApi";
-import type {LoginArgs} from "@/features/auth/api/authApi.types.ts";
+import type {LoginArgs, MeResponse} from "@/features/auth/api/authApi.types.ts";
 import {AUTH_KEYS} from "@/common/constants";
 import {withZodCatch} from "@/common/utils";
 import {loginResponseSchema, meResponseSchema} from "@/features/auth/model/api.schemas.ts";
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: build => ({
-        getMe: build.query({
+        getMe: build.query<MeResponse, void>({
             query: () => `auth/me`,
             ...withZodCatch(meResponseSchema),
             providesTags: ['Auth']
