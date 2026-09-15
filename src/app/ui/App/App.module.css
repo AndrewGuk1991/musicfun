@@ -1,5 +1,11 @@
 
+.main {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
 .layout {
+
     display: flex;
     flex-direction: row;
     min-height: calc(100vh - 80px);
@@ -10,7 +16,6 @@
 
 .content {
     flex-grow: 1;
-    padding: 24px;
     background-color: var(--color-dark-dark);
     min-width: 0;
 }

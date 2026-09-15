@@ -12,7 +12,7 @@ export const App = () => {
 
     return (
 
-        <>
+        <div className={s.main}>
             <Header/>
             {isGlobalLoading && <LinearProgress/>}
             <div className={s.layout}>
@@ -22,7 +22,7 @@ export const App = () => {
                 </main>
             </div>
             <ToastContainer/>
-        </>
+        </div>
     )
 }
 
