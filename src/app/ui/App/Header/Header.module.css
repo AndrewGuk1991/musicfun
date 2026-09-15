@@ -1,5 +1,5 @@
 .container {
-    border-bottom: 1px solid black;
+    background-color: var(--color-dark-dark);
     padding: 20px 42px;
     display: flex;
     align-items: center;

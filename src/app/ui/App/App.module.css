@@ -1,27 +1,29 @@
 
-
 .layout {
-    /*max-width: 1186px;*/
-    /*margin: 0 auto 200px;*/
-
     display: flex;
     flex-direction: row;
-    min-height: calc(100vh - 60px);
+    min-height: calc(100vh - 80px);
+    background-color: var(--color-dark-dark);
+    margin: 0;
+    padding: 0;
 }
 
 .content {
     flex-grow: 1;
     padding: 24px;
+    background-color: var(--color-dark-dark);
+    min-width: 0;
 }
-
 
 @media (max-width: 767px) {
     .layout {
-        flex-direction: column; /* Элементы встают друг под друга */
+        flex-direction: column;
+        min-height: calc(100vh - 60px);
     }
 
     .content {
         padding: 16px;
-        margin-bottom: 70px; /* Делаем отступ снизу, чтобы контент не перекрывался прижатым сайдбаром */
+        margin-bottom: 70px;
+        background-color: #ffffff;
     }
 }
