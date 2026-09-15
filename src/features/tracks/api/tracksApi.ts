@@ -20,8 +20,15 @@ export const tracksApi = baseApi.injectEndpoints({
                 }
             ),
             ...withZodCatch(fetchTracksResponseSchema)
+        }),
+        fetchLastTracks: build.query<FetchTracksResponse, { pageSize: number }>({
+            query: ({ pageSize }) => ({
+                url: 'playlists/tracks',
+                params: { paginationType: 'cursor', pageSize }
+            }),
+            ...withZodCatch(fetchTracksResponseSchema)
         })
     })
 })
 
-export const {useFetchTracksInfiniteQuery} = tracksApi
+export const {useFetchTracksInfiniteQuery, useFetchLastTracksQuery} = tracksApi
