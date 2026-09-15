@@ -1,8 +1,10 @@
-
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-
 
 :root {
 
@@ -100,7 +102,7 @@ strong, .semibold-text {
 }
 
 .app-nav-link-active {
-  background-color: var(--color-orange-500);
+  background-color: var(--color-gray-800);
   color: var(--color-dark-dark) !important;
   font-weight: 700;
 }
