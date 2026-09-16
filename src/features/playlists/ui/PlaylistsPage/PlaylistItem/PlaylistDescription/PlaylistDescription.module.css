@@ -1,0 +1,17 @@
+.userName {
+    border-bottom: 1px solid var(--color-light-light);
+    display: inline-block;
+    margin-left: 6px
+}
+
+.metaInfo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.separator {
+    color: var(--color-gray-500);
+    font-size: 1.2em;
+    line-height: 1;
+}
