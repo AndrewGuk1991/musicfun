@@ -4,6 +4,8 @@ import {
     PlaylistDescription
 } from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistDescription/PlaylistDescription.tsx";
 
+import s from './PlaylistItem.module.css'
+
 type Props = {
     playlist: PlaylistData
     deletePlaylistHandler: (playlistId: string) => void
@@ -14,7 +16,7 @@ export const PlaylistItem = ({playlist, deletePlaylistHandler, editPlaylistHandl
 
 
     return (
-        <div>
+        <div className={s.item}>
             <PlaylistCover playlistId={playlist.id} images={playlist.attributes.images}/>
             <PlaylistDescription attributes={playlist.attributes}/>
             <button onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>

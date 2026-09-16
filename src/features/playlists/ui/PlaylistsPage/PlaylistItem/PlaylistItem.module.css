@@ -1,0 +1,7 @@
+.item {
+    width: 100%;
+    max-width: 264px;
+    min-width: 190px;
+    padding: 8px;
+    background-color: color-mix(in srgb, var(--color-gray-950) 60%, transparent);
+}
