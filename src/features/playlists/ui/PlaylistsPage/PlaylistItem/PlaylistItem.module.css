@@ -5,3 +5,20 @@
     padding: 8px;
     background-color: color-mix(in srgb, var(--color-gray-950) 60%, transparent);
 }
+
+.actionButton {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: 1px solid #7f7f7f;
+    padding: 4px 8px;
+    color: var(--color-light-light);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.buttonsWrapper {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}

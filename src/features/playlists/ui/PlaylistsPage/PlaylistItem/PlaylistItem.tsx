@@ -19,8 +19,10 @@ export const PlaylistItem = ({playlist, deletePlaylistHandler, editPlaylistHandl
         <div className={s.item}>
             <PlaylistCover playlistId={playlist.id} images={playlist.attributes.images}/>
             <PlaylistDescription attributes={playlist.attributes}/>
-            <button onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>
-            <button onClick={() => editPlaylistHandler(playlist)}>update</button>
+            <div className={s.buttonsWrapper}>
+                <button className={s.actionButton} onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>
+                <button className={s.actionButton} onClick={() => editPlaylistHandler(playlist)}>update</button>
+            </div>
         </div>
     )
 }
