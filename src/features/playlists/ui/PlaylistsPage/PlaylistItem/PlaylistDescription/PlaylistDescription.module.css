@@ -15,3 +15,34 @@
     font-size: 1.2em;
     line-height: 1;
 }
+
+.actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.likeButtonWithCount {
+    flex-direction: column;
+    align-items: center;
+}
+
+.actionButton {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-gray-400);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.actionButton:hover {
+    color: var(--color-light-light)
+}
+
+.likesCount {
+    font-size: 14px;
+    font-weight: 500;
+}
