@@ -1,0 +1,149 @@
+
+.form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 24px;
+    padding-top: 16px;
+}
+
+.coverContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.imageWrapper {
+    width: 220px;
+    height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px dashed var(--color-gray-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-gray-950);
+    transition: border-color 0.2s ease;
+}
+
+.imageWrapper:has(img) {
+    border-style: solid;
+    border-color: var(--color-gray-800);
+}
+
+.previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.noImage {
+    color: var(--color-gray-500);
+    font-size: 14px;
+}
+
+.fileInputLabel {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-gray-800);
+    color: var(--color-gray-200);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.fileInputLabel:hover {
+    background-color: var(--color-gray-700);
+    color: var(--color-light-light);
+}
+
+.fileInput {
+    display: none;
+}
+
+.inputField {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputField input {
+    width: 100%;
+    padding: 14px 16px;
+    background-color: var(--color-gray-950);
+    border: 1px solid var(--color-gray-800);
+    border-radius: 8px;
+    color: var(--color-light-light);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inputField input:focus {
+    border-color: var(--color-orange-500);
+    box-shadow: 0 0 0 3px rgba(244, 152, 0, 0.15);
+}
+
+.inputField input::placeholder {
+    color: var(--color-gray-600);
+}
+
+.inputField input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: auto; /* Прижимает блок к низу модального окна */
+    padding-top: 24px;
+    border-top: 1px solid var(--color-gray-800);
+}
+
+.btnSave {
+    padding: 12px 28px;
+    background-color: var(--color-orange-500);
+    color: var(--color-dark-dark);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+}
+
+.btnSave:hover:not(:disabled) {
+    background-color: var(--color-orange-400);
+}
+
+.btnSave:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.btnCancel {
+    padding: 12px 28px;
+    background: none;
+    border: 1px solid var(--color-gray-700);
+    color: var(--color-gray-300);
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.btnCancel:hover:not(:disabled) {
+    background-color: var(--color-gray-800);
+    color: var(--color-light-light);
+}
+
+.btnSave:disabled,
+.btnCancel:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
