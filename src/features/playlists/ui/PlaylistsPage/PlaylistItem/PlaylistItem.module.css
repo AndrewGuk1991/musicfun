@@ -1,9 +1,25 @@
 .item {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 264px;
     min-width: 190px;
     padding: 8px;
     background-color: color-mix(in srgb, var(--color-gray-950) 60%, transparent);
+}
+
+.cover {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 248 / 153;
+    object-fit: cover;
+    transition: opacity 0.2s ease;
+}
+
+@media (max-width: 768px) {
+    .cover {
+        aspect-ratio: 174 / 153;
+    }
 }
 
 .actionButton {
@@ -21,4 +37,7 @@
     display: flex;
     gap: 8px;
     margin-top: 8px;
+    width: 100%;
 }
+
+
