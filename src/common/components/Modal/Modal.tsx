@@ -1,4 +1,3 @@
-
 import { useEffect, type ReactNode } from 'react';
 import s from './Modal.module.css';
 
@@ -38,7 +37,6 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
         <div className={s.overlay} onClick={onClose}>
             <div className={s.content} onClick={(e) => e.stopPropagation()}>
                 <button className={s.closeButton} onClick={onClose} type="button" aria-label="Close modal">
-                    &times;
                 </button>
                 {children}
             </div>
