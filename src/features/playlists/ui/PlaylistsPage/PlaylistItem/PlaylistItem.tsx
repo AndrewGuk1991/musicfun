@@ -1,9 +1,8 @@
 import type {PlaylistData} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
-import {PlaylistCover} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistCover/PlaylistCover.tsx";
 import {
     PlaylistDescription
 } from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistDescription/PlaylistDescription.tsx";
-
+import defaultCover from '@/assets/images/default-playlist-cover.png'
 import s from './PlaylistItem.module.css'
 
 type Props = {
@@ -14,10 +13,12 @@ type Props = {
 
 export const PlaylistItem = ({playlist, deletePlaylistHandler, editPlaylistHandler}: Props) => {
 
+    const originalCover = playlist.attributes.images.main?.find(img => img.type === 'original')
+    const src = originalCover ? originalCover?.url : defaultCover
 
     return (
         <div className={s.item}>
-            <PlaylistCover playlistId={playlist.id} images={playlist.attributes.images}/>
+            <img className={s.cover} src={src} alt={'cover'}/>
             <PlaylistDescription attributes={playlist.attributes}/>
             <div className={s.buttonsWrapper}>
                 <button className={s.actionButton} onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>
