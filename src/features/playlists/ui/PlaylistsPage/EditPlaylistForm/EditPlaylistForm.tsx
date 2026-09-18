@@ -1,18 +1,27 @@
 import { useEffect, useState } from "react";
-import type { SubmitHandler, UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form";
+import type {
+    SubmitHandler,
+    UseFormHandleSubmit,
+    UseFormRegister,
+    UseFormWatch,
+    FieldErrors
+} from "react-hook-form";
 import { useUpdatePlaylistMutation, useUploadPlaylistCoverMutation } from "@/features/playlists/api/playlists/playlistsApi.ts";
 import type { EditFormValues } from "../PlaylistsList/PlaylistsList.tsx";
+
 import s from './EditPlaylistForm.module.css';
+import {errorToast, validateCover} from "@/common/utils";
 
 type Props = {
     register: UseFormRegister<EditFormValues>
     handleSubmit: UseFormHandleSubmit<EditFormValues>
     watch: UseFormWatch<EditFormValues>
+    errors: FieldErrors<EditFormValues>
     editingPlaylistId: string | null
     onClose: () => void
 }
 
-export const EditPlaylistForm = ({ register, handleSubmit, watch, editingPlaylistId, onClose }: Props) => {
+export const EditPlaylistForm = ({ register, handleSubmit, watch, errors, editingPlaylistId, onClose }: Props) => {
     const [updatePlaylist, { isLoading: isUpdatingText }] = useUpdatePlaylistMutation()
     const [uploadPlaylistCover, { isLoading: isUploadingCover }] = useUploadPlaylistCoverMutation()
 
@@ -21,11 +30,15 @@ export const EditPlaylistForm = ({ register, handleSubmit, watch, editingPlaylis
 
     const [previewImage, setPreviewImage] = useState<string | undefined>(coverUrl)
 
+    // Эффект для обновления превью картинки
     useEffect(() => {
         let objectUrl: string | undefined
 
-        if (coverFile && coverFile.length > 0) {
-            objectUrl = URL.createObjectURL(coverFile[0])
+        // Если файл выбран и на нем нет ошибок валидации — создаем blob-ссылку
+        if (coverFile && coverFile.length > 0 && !errors.data?.attributes?.coverFile) {
+            const file = coverFile[0]
+
+            objectUrl = URL.createObjectURL(file)
             setPreviewImage(objectUrl)
         } else {
             setPreviewImage(coverUrl)
@@ -36,7 +49,7 @@ export const EditPlaylistForm = ({ register, handleSubmit, watch, editingPlaylis
                 URL.revokeObjectURL(objectUrl)
             }
         }
-    }, [coverFile, coverUrl])
+    }, [coverFile, coverUrl, errors.data?.attributes?.coverFile])
 
     const isSubmitting = isUpdatingText || isUploadingCover
 
@@ -59,13 +72,13 @@ export const EditPlaylistForm = ({ register, handleSubmit, watch, editingPlaylis
             }).unwrap()
 
             if (data.data.attributes.coverFile && data.data.attributes.coverFile.length > 0) {
-                const file = data.data.attributes.coverFile[0] // Достаем чистый File из коллекции FileList
+                const file = data.data.attributes.coverFile[0]
                 await uploadPlaylistCover({ playlistId: editingPlaylistId, file }).unwrap()
             }
 
             onClose()
         } catch (error) {
-            console.error("Ошибка при сохранении плейлиста:", error)
+            errorToast("Ошибка при сохранении плейлиста", error)
         }
     }
 
@@ -86,7 +99,9 @@ export const EditPlaylistForm = ({ register, handleSubmit, watch, editingPlaylis
                         type="file"
                         accept="image/*"
                         className={s.fileInput}
-                        {...register('data.attributes.coverFile')}
+                        disabled={isSubmitting}
+                        {...register('data.attributes.coverFile', {
+                            validate: validateCover})}
                     />
                 </label>
             </div>
