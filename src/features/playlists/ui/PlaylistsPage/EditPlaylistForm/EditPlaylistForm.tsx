@@ -1,43 +1,60 @@
 import { useEffect, useState } from "react";
-import type {
-    SubmitHandler,
-    UseFormHandleSubmit,
-    UseFormRegister,
-    UseFormWatch,
-    FieldErrors
-} from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { useUpdatePlaylistMutation, useUploadPlaylistCoverMutation } from "@/features/playlists/api/playlists/playlistsApi.ts";
-import type { EditFormValues } from "../PlaylistsList/PlaylistsList.tsx";
-
-import s from './EditPlaylistForm.module.css';
+import type { PlaylistData, UpdatePlaylistArgs } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
+import defaultCover from "@/assets/images/default-playlist-cover.png";
 import {errorToast, validateCover} from "@/common/utils";
+import s from './EditPlaylistForm.module.css';
 
-type Props = {
-    register: UseFormRegister<EditFormValues>
-    handleSubmit: UseFormHandleSubmit<EditFormValues>
-    watch: UseFormWatch<EditFormValues>
-    errors: FieldErrors<EditFormValues>
-    editingPlaylistId: string | null
-    onClose: () => void
+export type EditFormValues = UpdatePlaylistArgs & {
+    data: {
+        attributes: {
+            coverUrl?: string;
+            coverFile?: FileList;
+        }
+    }
 }
 
-export const EditPlaylistForm = ({ register, handleSubmit, watch, errors, editingPlaylistId, onClose }: Props) => {
+type Props = {
+    playlist: PlaylistData;
+    onClose: () => void;
+}
+
+export const EditPlaylistForm = ({ playlist, onClose }: Props) => {
     const [updatePlaylist, { isLoading: isUpdatingText }] = useUpdatePlaylistMutation()
     const [uploadPlaylistCover, { isLoading: isUploadingCover }] = useUploadPlaylistCoverMutation()
+
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<EditFormValues>({
+        mode: 'onChange',
+    })
 
     const coverUrl = watch('data.attributes.coverUrl')
     const coverFile = watch('data.attributes.coverFile')
 
     const [previewImage, setPreviewImage] = useState<string | undefined>(coverUrl)
 
-    // Эффект для обновления превью картинки
+    useEffect(() => {
+        if (playlist) {
+            reset({
+                data: {
+                    type: 'playlists',
+                    attributes: {
+                        title: playlist.attributes.title,
+                        description: 'описание не приходит с бэка',
+                        tagIds: playlist.attributes.tags.map(t => t.id),
+                        coverUrl: playlist.attributes.images.main?.find(img => img.type === 'original')?.url || defaultCover,
+                        coverFile: undefined
+                    }
+                }
+            })
+        }
+    }, [playlist, reset])
+
     useEffect(() => {
         let objectUrl: string | undefined
 
-        // Если файл выбран и на нем нет ошибок валидации — создаем blob-ссылку
         if (coverFile && coverFile.length > 0 && !errors.data?.attributes?.coverFile) {
             const file = coverFile[0]
-
             objectUrl = URL.createObjectURL(file)
             setPreviewImage(objectUrl)
         } else {
@@ -45,20 +62,16 @@ export const EditPlaylistForm = ({ register, handleSubmit, watch, errors, editin
         }
 
         return () => {
-            if (objectUrl) {
-                URL.revokeObjectURL(objectUrl)
-            }
+            if (objectUrl) URL.revokeObjectURL(objectUrl)
         }
     }, [coverFile, coverUrl, errors.data?.attributes?.coverFile])
 
     const isSubmitting = isUpdatingText || isUploadingCover
 
     const onSubmit: SubmitHandler<EditFormValues> = async (data) => {
-        if (!editingPlaylistId) return
-
         try {
             await updatePlaylist({
-                playlistId: editingPlaylistId,
+                playlistId: playlist.id,
                 body: {
                     data: {
                         type: data.data.type,
@@ -73,7 +86,7 @@ export const EditPlaylistForm = ({ register, handleSubmit, watch, errors, editin
 
             if (data.data.attributes.coverFile && data.data.attributes.coverFile.length > 0) {
                 const file = data.data.attributes.coverFile[0]
-                await uploadPlaylistCover({ playlistId: editingPlaylistId, file }).unwrap()
+                await uploadPlaylistCover({ playlistId: playlist.id, file }).unwrap()
             }
 
             onClose()
@@ -100,8 +113,7 @@ export const EditPlaylistForm = ({ register, handleSubmit, watch, errors, editin
                         accept="image/*"
                         className={s.fileInput}
                         disabled={isSubmitting}
-                        {...register('data.attributes.coverFile', {
-                            validate: validateCover})}
+                        {...register('data.attributes.coverFile', { validate: validateCover })}
                     />
                 </label>
             </div>
