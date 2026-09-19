@@ -26,11 +26,15 @@
 
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     color: var(--color-light-light);
+
+    display: flex;
+    flex-direction: column;
 }
 
 
 .header {
     margin-bottom: 16px;
+    flex-shrink: 0;
 }
 
 .header h3 {
@@ -46,9 +50,53 @@
 .footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     gap: 12px;
     margin-top: 24px;
+    flex-shrink: 0;
+}
+
+.footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+}
+
+
+.footer button:not(:disabled):hover {
+    transform: scale(1.02);
+}
+
+
+.footer button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+.btnCancel {
+    background-color: transparent;
+    color: #b3b3b3;
+    border: 1px solid #727272;
+}
+
+.btnCancel:not(:disabled):hover {
+    color: #fff;
+    border-color: #fff;
+}
+
+.btnSave {
+    background-color: #1db954;
+    color: #000;
+    border: none;
+}
+
+.btnSave:not(:disabled):hover {
+    background-color: #1ed760;
 }
 
 

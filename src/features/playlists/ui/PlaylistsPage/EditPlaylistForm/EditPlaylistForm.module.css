@@ -27,10 +27,6 @@
     transition: border-color 0.2s ease;
 }
 
-.imageWrapper:has(img) {
-    border-style: solid;
-    border-color: var(--color-gray-800);
-}
 
 .previewImage {
     width: 100%;
@@ -95,54 +91,3 @@
     cursor: not-allowed;
 }
 
-.actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: auto; /* Прижимает блок к низу модального окна */
-    padding-top: 24px;
-    border-top: 1px solid var(--color-gray-800);
-}
-
-.btnSave {
-    padding: 12px 28px;
-    background-color: var(--color-orange-500);
-    color: var(--color-dark-dark);
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
-}
-
-.btnSave:hover:not(:disabled) {
-    background-color: var(--color-orange-400);
-}
-
-.btnSave:active:not(:disabled) {
-    transform: scale(0.98);
-}
-
-.btnCancel {
-    padding: 12px 28px;
-    background: none;
-    border: 1px solid var(--color-gray-700);
-    color: var(--color-gray-300);
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
-}
-
-.btnCancel:hover:not(:disabled) {
-    background-color: var(--color-gray-800);
-    color: var(--color-light-light);
-}
-
-.btnSave:disabled,
-.btnCancel:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}

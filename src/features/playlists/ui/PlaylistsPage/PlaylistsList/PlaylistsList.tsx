@@ -1,4 +1,6 @@
 import s from './PlaylistsList.module.css'
+import modalStyles from '@/common/components/Modal/Modal.module.css'
+
 import {EditPlaylistForm} from "@/features/playlists/ui/PlaylistsPage/EditPlaylistForm/EditPlaylistForm.tsx";
 import {PlaylistItem} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistItem.tsx";
 import {useState} from "react";
@@ -63,15 +65,17 @@ export const PlaylistsList = ({playlists, isPlaylistLoading}: Props) => {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <button type="button" className={s.btnCancel} onClick={handleCloseModal} disabled={isFormSubmitting}>
-                            Cancel
-                        </button>
-                        <button type="submit" form="edit-playlist-form" className={s.btnSave} disabled={isFormSubmitting}>
-                            {isFormSubmitting ? 'Saving...' : 'Save Changes'}
-                        </button>
+                            <button type="button" className={modalStyles.btnCancel} onClick={handleCloseModal} disabled={isFormSubmitting}>
+                                Cancel
+                            </button>
+                            <button type="submit" form="edit-playlist-form" className={modalStyles.btnSave} disabled={isFormSubmitting}>
+                                {isFormSubmitting ? 'Saving...' : 'Save Changes'}
+                            </button>
                     </Modal.Footer>
                 </Modal>
             )}
         </div>
     )
 }
+
+
