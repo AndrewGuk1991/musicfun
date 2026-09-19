@@ -8,7 +8,6 @@ type Props = {
 };
 
 export const Modal = ({ isOpen, onClose, children }: Props) => {
-
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -42,4 +41,23 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
             </div>
         </div>
     );
+};
+
+// --- Подкомпоненты (Compound Components) ---
+
+type SubComponentProps = {
+    children: ReactNode;
+    className?: string;
+};
+
+Modal.Header = ({ children, className = '' }: SubComponentProps) => {
+    return <div className={`${s.header} ${className}`}>{children}</div>;
+};
+
+Modal.Body = ({ children, className = '' }: SubComponentProps) => {
+    return <div className={`${s.body} ${className}`}>{children}</div>;
+};
+
+Modal.Footer = ({ children, className = '' }: SubComponentProps) => {
+    return <div className={`${s.footer} ${className}`}>{children}</div>;
 };
