@@ -28,6 +28,30 @@
     color: var(--color-light-light);
 }
 
+
+.header {
+    margin-bottom: 16px;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.body {
+    flex: 1;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+
 .closeButton {
     position: absolute;
     top: 24px;
