@@ -13,7 +13,13 @@ type Props = {
 
 export const PlaylistsList = ({playlists, isPlaylistLoading}: Props) => {
     const [activePlaylist, setActivePlaylist] = useState<PlaylistData | null>(null)
+    const [isFormSubmitting, setIsFormSubmitting] = useState(false)
+
     const [deletePlaylist] = useDeletePlaylistMutation()
+
+    const uniquePlaylists = playlists.filter(
+        (playlist, index, self) => self.findIndex((p) => p.id === playlist.id) === index
+    )
 
     const deletePlaylistHandler = (playlistId: string) => {
         if (confirm('Are you sure you want to delete this playlist?')) {
@@ -31,8 +37,8 @@ export const PlaylistsList = ({playlists, isPlaylistLoading}: Props) => {
 
     return (
         <div className={s.items}>
-            {!playlists.length && !isPlaylistLoading && <h2>Playlists not found</h2>}
-            {playlists.map((playlist) => (
+            {!uniquePlaylists.length && !isPlaylistLoading && <h2>Playlists not found</h2>}
+            {uniquePlaylists.map((playlist) => (
                 <div className={s.item} key={playlist.id}>
                     <PlaylistItem
                         playlist={playlist}
@@ -44,12 +50,26 @@ export const PlaylistsList = ({playlists, isPlaylistLoading}: Props) => {
 
             {activePlaylist && (
                 <Modal isOpen={Boolean(activePlaylist)} onClose={handleCloseModal}>
-                    <h3>Edit playlist</h3>
+                    <Modal.Header>
+                        <h3>Edit playlist</h3>
+                    </Modal.Header>
 
-                    <EditPlaylistForm
-                        playlist={activePlaylist}
-                        onClose={handleCloseModal}
-                    />
+                    <Modal.Body>
+                        <EditPlaylistForm
+                            playlist={activePlaylist}
+                            onClose={handleCloseModal}
+                            onLoadingChange={setIsFormSubmitting}
+                        />
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <button type="button" className={s.btnCancel} onClick={handleCloseModal} disabled={isFormSubmitting}>
+                            Cancel
+                        </button>
+                        <button type="submit" form="edit-playlist-form" className={s.btnSave} disabled={isFormSubmitting}>
+                            {isFormSubmitting ? 'Saving...' : 'Save Changes'}
+                        </button>
+                    </Modal.Footer>
                 </Modal>
             )}
         </div>

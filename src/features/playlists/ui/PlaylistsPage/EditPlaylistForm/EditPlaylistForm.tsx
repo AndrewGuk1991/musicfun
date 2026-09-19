@@ -18,9 +18,10 @@ export type EditFormValues = UpdatePlaylistArgs & {
 type Props = {
     playlist: PlaylistData;
     onClose: () => void;
+    onLoadingChange?: (isLoading: boolean) => void;
 }
 
-export const EditPlaylistForm = ({ playlist, onClose }: Props) => {
+export const EditPlaylistForm = ({ playlist, onClose, onLoadingChange }: Props) => {
     const [updatePlaylist, { isLoading: isUpdatingText }] = useUpdatePlaylistMutation()
     const [uploadPlaylistCover, { isLoading: isUploadingCover }] = useUploadPlaylistCoverMutation()
 
@@ -68,6 +69,10 @@ export const EditPlaylistForm = ({ playlist, onClose }: Props) => {
 
     const isSubmitting = isUpdatingText || isUploadingCover
 
+    useEffect(() => {
+        onLoadingChange?.(isSubmitting)
+    }, [isSubmitting, onLoadingChange])
+
     const onSubmit: SubmitHandler<EditFormValues> = async (data) => {
         try {
             await updatePlaylist({
@@ -96,7 +101,7 @@ export const EditPlaylistForm = ({ playlist, onClose }: Props) => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+        <form id="edit-playlist-form" onSubmit={handleSubmit(onSubmit)} className={s.form}>
             <div className={s.coverContainer}>
                 <div className={s.imageWrapper}>
                     {previewImage ? (
@@ -124,15 +129,6 @@ export const EditPlaylistForm = ({ playlist, onClose }: Props) => {
 
             <div className={s.inputField}>
                 <input {...register('data.attributes.description')} placeholder="Playlist description" disabled={isSubmitting} />
-            </div>
-
-            <div className={s.actions}>
-                <button type="button" className={s.btnCancel} onClick={onClose} disabled={isSubmitting}>
-                    Cancel
-                </button>
-                <button type="submit" className={s.btnSave} disabled={isSubmitting}>
-                    {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </button>
             </div>
         </form>
     )
