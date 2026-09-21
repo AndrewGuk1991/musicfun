@@ -3,7 +3,7 @@ import {
     createPlaylistSchema,
     playlistAttributesSchema,
     playlistDataSchema,
-    type playlistMetaSchema, playlistsResponseSchema
+    type playlistMetaSchema, playlistsResponseSchema, reactionPlaylistResponseSchema
 } from "@/features/playlists/model/playlists.schemas.ts";
 
 export type PlaylistsResponse = z.infer<typeof playlistsResponseSchema>
@@ -15,6 +15,8 @@ export type PlaylistMeta = z.infer<typeof playlistMetaSchema>
 export type PlaylistAttributes = z.infer<typeof playlistAttributesSchema>
 
 export type CreatePlaylistArgs = z.infer<typeof createPlaylistSchema>
+
+export type ReactionPlaylistResponse = z.infer<typeof reactionPlaylistResponseSchema>
 
 
 // Arguments
