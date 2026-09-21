@@ -1,7 +1,7 @@
 .userName {
     border-bottom: 1px solid var(--color-light-light);
     display: inline-block;
-    margin-left: 6px
+    margin-left: 6px;
 }
 
 .metaInfo {
@@ -38,11 +38,27 @@
     transition: color 0.2s ease;
 }
 
-.actionButton:hover {
-    color: var(--color-light-light)
+
+.actionButton:hover:not(:disabled) {
+    filter: brightness(1.25);
+}
+
+
+.actionButton.active {
+    color: var(--color-crimson-400);
+}
+
+.actionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .likesCount {
+    color: var(--color-gray-300);
     font-size: 14px;
     font-weight: 500;
+}
+
+.actionButton svg {
+    display: block
 }
