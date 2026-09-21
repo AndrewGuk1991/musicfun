@@ -19,7 +19,7 @@ export const PlaylistItem = ({playlist, deletePlaylistHandler, editPlaylistHandl
     return (
         <div className={s.item}>
             <img className={s.cover} src={src} alt={'cover'}/>
-            <PlaylistDescription attributes={playlist.attributes}/>
+            <PlaylistDescription attributes={playlist.attributes} playlistId={playlist.id} />
             <div className={s.buttonsWrapper}>
                 <button className={s.actionButton} onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>
                 <button className={s.actionButton} onClick={() => editPlaylistHandler(playlist)}>update</button>
