@@ -146,6 +146,14 @@ export const playlistsApi = baseApi.injectEndpoints({
             }),
             ...withZodCatch(reactionPlaylistResponseSchema),
             invalidatesTags: ['Playlist']
+        }),
+        removeReactionPlaylist: build.mutation<ReactionPlaylistResponse, string>({
+            query: (playlistId) => ({
+                url: `playlists/${playlistId}/reactions`,
+                method: 'delete',
+            }),
+            ...withZodCatch(reactionPlaylistResponseSchema),
+            invalidatesTags: ['Playlist']
         })
     })
 })
@@ -159,6 +167,7 @@ export const {
     useDeletePlaylistCoverMutation,
     useLikePlaylistMutation,
     useDislikePlaylistMutation,
+    useRemoveReactionPlaylistMutation,
 } = playlistsApi
 
 
