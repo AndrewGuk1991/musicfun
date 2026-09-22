@@ -3,3 +3,9 @@
     padding: 32px 32px;
     background: linear-gradient(180deg, #3333a3 5.09%, #121212 33.4%);
 }
+
+.playlistsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
