@@ -2,7 +2,11 @@ import type {PlaylistAttributes} from "@/features/playlists/api/playlists/playli
 import s from './PlaylistDescription.module.css'
 import {Icon} from "@/common/components";
 import {useRelativeDate} from "@/common/utils";
-import {useDislikePlaylistMutation, useLikePlaylistMutation} from "@/features/playlists/api/playlists/playlistsApi.ts";
+import {
+    useDislikePlaylistMutation,
+    useLikePlaylistMutation,
+    useRemoveReactionPlaylistMutation
+} from "@/features/playlists/api/playlists/playlistsApi.ts";
 import {CurrentUserReaction} from "@/common/enums";
 
 
@@ -15,28 +19,39 @@ export const PlaylistDescription = ({attributes, playlistId}: Props) => {
 
     const [likePlaylist, { isLoading: isLikeLoading }] = useLikePlaylistMutation();
     const [dislikePlaylist, { isLoading: isDislikeLoading }] = useDislikePlaylistMutation();
+    const [removeReactionPlaylist, { isLoading: isRemoveReactionLoading }] = useRemoveReactionPlaylistMutation();
 
     const relativeDate = useRelativeDate(attributes.addedAt)
 
     const currentReaction = attributes.currentUserReaction ?? CurrentUserReaction.None
 
+    const isAnyActionLoading = isLikeLoading || isDislikeLoading || isRemoveReactionLoading;
+
     const handleLikeClick = async () => {
         try {
-
-            await likePlaylist(playlistId).unwrap();
+            // Если лайк уже нажат, отправляем противоположный запрос — дизлайк
+            if (currentReaction === CurrentUserReaction.Like) {
+                await removeReactionPlaylist(playlistId).unwrap();
+            } else {
+                await likePlaylist(playlistId).unwrap();
+            }
         } catch (error) {
-            console.error("Failed to toggle like status:", error);
+            console.error("Failed to toggle reaction status:", error);
         }
     };
 
     const handleDislikeClick = async () => {
         try {
-            await dislikePlaylist(playlistId).unwrap();
+            // Если дизлайк уже нажат, отправляем противоположный запрос — лайк
+            if (currentReaction === CurrentUserReaction.Dislike) {
+                await removeReactionPlaylist(playlistId).unwrap();
+            } else {
+                await dislikePlaylist(playlistId).unwrap();
+            }
         } catch (error) {
-            console.error("Failed to toggle dislike status:", error);
+            console.error("Failed to toggle reaction status:", error);
         }
     };
-
 
     return (
         <>
@@ -56,7 +71,7 @@ export const PlaylistDescription = ({attributes, playlistId}: Props) => {
                     className={`${s.actionButton} ${s.likeButtonWithCount} ${currentReaction === CurrentUserReaction.Like ? s.active : ''}`}
                     type="button"
                     onClick={handleLikeClick}
-                    disabled={isLikeLoading} // Защита от спама, пока идет запрос
+                    disabled={isAnyActionLoading}
                 >
                     <Icon id={currentReaction === CurrentUserReaction.Like ? 'icon-like-filled' : 'icon-like'} />
                     <span className={s.likesCount}>{attributes.likesCount}</span>
@@ -66,7 +81,7 @@ export const PlaylistDescription = ({attributes, playlistId}: Props) => {
                     className={`${s.actionButton} ${currentReaction === CurrentUserReaction.Dislike ? s.active : ''}`}
                     type="button"
                     onClick={handleDislikeClick}
-                    disabled={isDislikeLoading}
+                    disabled={isAnyActionLoading}
                 >
                     <Icon id='icon-dislike' />
                 </button>
