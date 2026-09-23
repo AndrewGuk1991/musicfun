@@ -1,6 +1,6 @@
 import type { PlaylistAttributes } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import s from './PlaylistDescription.module.css'
-import { Icon } from "@/common/components";
+import {ReactionActions} from "@/common/components";
 import { useRelativeDate } from "@/common/utils";
 import {
     useDislikePlaylistMutation,
@@ -49,26 +49,13 @@ export const PlaylistDescription = ({ attributes, playlistId }: Props) => {
                 <span>Created {relativeDate}</span>
             </p>
 
-            <div className={s.actions}>
-                <button
-                    className={`${s.actionButton} ${s.likeButtonWithCount} ${currentReaction === CurrentUserReaction.Like ? s.active : ''}`}
-                    type="button"
-                    onClick={handleLikeClick}
-                    disabled={isAnyActionLoading}
-                >
-                    <Icon id={currentReaction === CurrentUserReaction.Like ? 'icon-like-filled' : 'icon-like'} />
-                    <span className={s.likesCount}>{attributes.likesCount}</span>
-                </button>
-
-                <button
-                    className={`${s.actionButton} ${currentReaction === CurrentUserReaction.Dislike ? s.active : ''}`}
-                    type="button"
-                    onClick={handleDislikeClick}
-                    disabled={isAnyActionLoading}
-                >
-                    <Icon id='icon-dislike' />
-                </button>
-            </div>
+            <ReactionActions
+                currentReaction={currentReaction}
+                likesCount={attributes.likesCount}
+                isLoading={isAnyActionLoading}
+                onLikeClick={handleLikeClick}
+                onDislikeClick={handleDislikeClick}
+            />
         </>
     )
 }
