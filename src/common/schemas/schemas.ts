@@ -24,4 +24,8 @@ export const imagesSchema = z.object({
     main: z.array(coverSchema),
 })
 
-export const currentUserReactionSchema = z.enum(CurrentUserReaction)
+export const currentUserReactionSchema =  z.union([
+    z.literal(CurrentUserReaction.Like),
+    z.literal(CurrentUserReaction.Dislike),
+    z.literal(CurrentUserReaction.None),
+]);
