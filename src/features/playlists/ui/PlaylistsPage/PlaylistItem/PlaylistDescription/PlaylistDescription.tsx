@@ -1,57 +1,40 @@
-import type {PlaylistAttributes} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
+import type { PlaylistAttributes } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import s from './PlaylistDescription.module.css'
-import {Icon} from "@/common/components";
-import {useRelativeDate} from "@/common/utils";
+import { Icon } from "@/common/components";
+import { useRelativeDate } from "@/common/utils";
 import {
     useDislikePlaylistMutation,
     useLikePlaylistMutation,
     useRemoveReactionPlaylistMutation
 } from "@/features/playlists/api/playlists/playlistsApi.ts";
-import {CurrentUserReaction} from "@/common/enums";
+import { CurrentUserReaction } from "@/common/enums";
 
+import type {CurrentUserReactionValue} from "@/common/types";
+import {useReactionHandler} from "@/common/hooks";
 
 type Props = {
     attributes: PlaylistAttributes,
     playlistId: string,
 }
 
-export const PlaylistDescription = ({attributes, playlistId}: Props) => {
-
+export const PlaylistDescription = ({ attributes, playlistId }: Props) => {
     const [likePlaylist, { isLoading: isLikeLoading }] = useLikePlaylistMutation();
     const [dislikePlaylist, { isLoading: isDislikeLoading }] = useDislikePlaylistMutation();
     const [removeReactionPlaylist, { isLoading: isRemoveReactionLoading }] = useRemoveReactionPlaylistMutation();
 
     const relativeDate = useRelativeDate(attributes.addedAt)
 
-    const currentReaction = attributes.currentUserReaction ?? CurrentUserReaction.None
+    // Приводим к типу CurrentUserReactionValue, используя значение из объекта
+    const currentReaction = (attributes.currentUserReaction ?? CurrentUserReaction.None) as CurrentUserReactionValue;
 
     const isAnyActionLoading = isLikeLoading || isDislikeLoading || isRemoveReactionLoading;
 
-    const handleLikeClick = async () => {
-        try {
-            // Если лайк уже нажат, отправляем противоположный запрос — дизлайк
-            if (currentReaction === CurrentUserReaction.Like) {
-                await removeReactionPlaylist(playlistId).unwrap();
-            } else {
-                await likePlaylist(playlistId).unwrap();
-            }
-        } catch (error) {
-            console.error("Failed to toggle reaction status:", error);
-        }
-    };
-
-    const handleDislikeClick = async () => {
-        try {
-            // Если дизлайк уже нажат, отправляем противоположный запрос — лайк
-            if (currentReaction === CurrentUserReaction.Dislike) {
-                await removeReactionPlaylist(playlistId).unwrap();
-            } else {
-                await dislikePlaylist(playlistId).unwrap();
-            }
-        } catch (error) {
-            console.error("Failed to toggle reaction status:", error);
-        }
-    };
+    // Передаем id, текущую реакцию и методы мутаций в наш универсальный хук
+    const { handleLikeClick, handleDislikeClick } = useReactionHandler(playlistId, currentReaction, {
+        like: likePlaylist,
+        dislike: dislikePlaylist,
+        removeReaction: removeReactionPlaylist,
+    });
 
     return (
         <>
@@ -89,4 +72,3 @@ export const PlaylistDescription = ({attributes, playlistId}: Props) => {
         </>
     )
 }
-
