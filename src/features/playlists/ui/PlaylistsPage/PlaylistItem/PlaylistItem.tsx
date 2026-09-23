@@ -1,4 +1,5 @@
-import type {PlaylistData} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
+import { memo } from 'react';
+import type { PlaylistData } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import {
     PlaylistDescription
 } from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistDescription/PlaylistDescription.tsx";
@@ -11,19 +12,28 @@ type Props = {
     editPlaylistHandler: (playlist: PlaylistData) => void
 }
 
-export const PlaylistItem = ({playlist, deletePlaylistHandler, editPlaylistHandler}: Props) => {
-
+export const PlaylistItem = memo(({ playlist, deletePlaylistHandler, editPlaylistHandler }: Props) => {
     const originalCover = playlist.attributes.images.main?.find(img => img.type === 'original')
-    const src = originalCover ? originalCover?.url : defaultCover
+    const src = originalCover?.url || defaultCover
+
+    const handleDelete = () => deletePlaylistHandler(playlist.id)
+    const handleEdit = () => editPlaylistHandler(playlist)
+
 
     return (
         <div className={s.item}>
-            <img className={s.cover} src={src} alt={'cover'}/>
+            <img className={s.cover} src={src} alt="cover" />
             <PlaylistDescription attributes={playlist.attributes} playlistId={playlist.id} />
             <div className={s.buttonsWrapper}>
-                <button className={s.actionButton} onClick={() => deletePlaylistHandler(playlist.id)}>delete</button>
-                <button className={s.actionButton} onClick={() => editPlaylistHandler(playlist)}>update</button>
+                <button type="button" className={s.actionButton} onClick={handleDelete}>
+                    delete
+                </button>
+                <button type="button" className={s.actionButton} onClick={handleEdit}>
+                    update
+                </button>
             </div>
         </div>
     )
-}
+})
+
+PlaylistItem.displayName = 'PlaylistItem'
