@@ -4,7 +4,7 @@ import {baseQueryWithReauth} from "@/app/api/baseQueryWithReauth.ts";
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
-    tagTypes: ['Playlist', 'Auth'],
+    tagTypes: ['Playlist', 'Auth', 'Track'],
     endpoints: () => ({}),
     baseQuery: baseQueryWithReauth,
     skipSchemaValidation: process.env.NODE_ENV === 'production',
