@@ -1,0 +1,31 @@
+
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 128px;
+    height: 230px;
+    padding: 8px;
+    background-color: color-mix(in srgb, var(--color-gray-950) 60%, transparent);
+}
+
+.cover {
+    width: 112px;
+    height: 102px;
+    object-fit: cover;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 14px;
+    height: 39px;
+    line-height: 1.4;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.artist {
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--color-gray-300);
+}
+
