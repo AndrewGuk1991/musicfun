@@ -29,3 +29,10 @@ export const currentUserReactionSchema =  z.union([
     z.literal(CurrentUserReaction.Dislike),
     z.literal(CurrentUserReaction.None),
 ]);
+
+export const reactionUserResponseSchema = z.object({
+    objectId: z.string(),
+    value: currentUserReactionSchema,
+    likes: z.int().nonnegative(),
+    dislikes: z.int().nonnegative(),
+})
