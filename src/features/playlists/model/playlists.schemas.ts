@@ -54,9 +54,4 @@ export const playlistCreateResponseSchema = z.object({
     data: playlistDataSchema,
 })
 
-export const reactionPlaylistResponseSchema = z.object({
-    objectId: z.string(),
-    value: currentUserReactionSchema,
-    likes: z.int().nonnegative(),
-    dislikes: z.int().nonnegative(),
-})
+
