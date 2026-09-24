@@ -2,18 +2,16 @@ import type {
     CreatePlaylistArgs,
     FetchPlaylistsArgs,
     PlaylistCreatedEvent, PlaylistUpdateEvent,
-    ReactionPlaylistResponse,
     UpdatePlaylistArgs
 } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
-import type {Images} from "@/common/types";
+import type {Images, ReactionUserResponse} from "@/common/types";
 import {baseApi} from "@/app/api/baseApi.ts";
 import {
     playlistCreateResponseSchema,
     playlistsResponseSchema,
-    reactionPlaylistResponseSchema
 } from "@/features/playlists/model/playlists.schemas.ts";
 import {withZodCatch} from "@/common/utils";
-import {imagesSchema} from "@/common/schemas";
+import {imagesSchema, reactionUserResponseSchema} from "@/common/schemas";
 import {SOCKET_EVENTS} from "@/common/constants";
 import {subscribeToEvent} from "@/common/socket";
 
@@ -131,28 +129,28 @@ export const playlistsApi = baseApi.injectEndpoints({
             query: ({playlistId}) => ({url: `playlists/${playlistId}/images/main`, method: 'delete'}),
             invalidatesTags: ['Playlist']
         }),
-        likePlaylist: build.mutation<ReactionPlaylistResponse, string>({
+        likePlaylist: build.mutation<ReactionUserResponse, string>({
             query: (playlistId) => ({
                 url: `playlists/${playlistId}/likes`,
                 method: 'post',
             }),
-            ...withZodCatch(reactionPlaylistResponseSchema),
+            ...withZodCatch(reactionUserResponseSchema),
             invalidatesTags: ['Playlist']
         }),
-        dislikePlaylist: build.mutation<ReactionPlaylistResponse, string>({
+        dislikePlaylist: build.mutation<ReactionUserResponse, string>({
             query: (playlistId) => ({
                 url: `playlists/${playlistId}/dislikes`,
                 method: 'post',
             }),
-            ...withZodCatch(reactionPlaylistResponseSchema),
+            ...withZodCatch(reactionUserResponseSchema),
             invalidatesTags: ['Playlist']
         }),
-        removeReactionPlaylist: build.mutation<ReactionPlaylistResponse, string>({
+        removeReactionPlaylist: build.mutation<ReactionUserResponse, string>({
             query: (playlistId) => ({
                 url: `playlists/${playlistId}/reactions`,
                 method: 'delete',
             }),
-            ...withZodCatch(reactionPlaylistResponseSchema),
+            ...withZodCatch(reactionUserResponseSchema),
             invalidatesTags: ['Playlist']
         })
     })
