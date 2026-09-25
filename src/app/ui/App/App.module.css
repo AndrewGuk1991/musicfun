@@ -5,13 +5,21 @@
 }
 
 .layout {
-
+    position: relative;
     display: flex;
     flex-direction: row;
     min-height: calc(100vh - 80px);
     background-color: var(--color-dark-dark);
     margin: 0;
     padding: 0;
+}
+
+.progressWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
 }
 
 .content {

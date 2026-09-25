@@ -14,8 +14,12 @@ export const App = () => {
 
         <div className={s.main}>
             <Header/>
-            {isGlobalLoading && <LinearProgress/>}
             <div className={s.layout}>
+                {isGlobalLoading && (
+                    <div className={s.progressWrapper}>
+                        <LinearProgress/>
+                    </div>
+                )}
                 <Sidebar />
                 <main className={s.content}>
                     <Routing />
