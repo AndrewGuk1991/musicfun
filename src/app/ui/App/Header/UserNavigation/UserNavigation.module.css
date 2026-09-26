@@ -1,0 +1,59 @@
+.loginContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 6px;
+}
+
+.avatarPlaceholder {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-crimson-300);
+    border: 1px solid var(--color-gray-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    user-select: none;
+}
+
+.dropdownWrapper {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.dropdownButton {
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    background: transparent;
+    color: var(--color-light-light);
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.dropdownButton:hover {
+    border-color: var(--color-gray-400, #555);
+}
+
+.dropdownButton svg {
+    flex-shrink: 0;
+}
+
+.arrow {
+    transition: transform 0.2s ease-in-out;
+    transform-origin: center center;
+}
+
+.arrow.rotated {
+    transform: rotate(180deg);
+}
