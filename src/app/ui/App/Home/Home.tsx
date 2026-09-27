@@ -1,39 +1,25 @@
-import {useFetchPlaylistsQuery} from "@/features/playlists/api/playlists/playlistsApi.ts";
-import {PlaylistsList} from "@/features/playlists/ui";
-// import {useFetchLastTracksQuery} from "@/features/tracks/api/tracksApi.ts";
-// import {TracksList} from "@/features/tracks/ui/TracksList/TracksList.tsx";
-import s from './Home.module.css'
-import {PlaylistSkeleton} from "@/common/components";
-
+import { useFetchPlaylistsQuery } from "@/features/playlists/api/playlists/playlistsApi.ts";
+import { PlaylistsList } from "@/features/playlists/ui";
+import { useFetchLastTracksQuery } from "@/features/tracks/api/tracksApi.ts";
+import { TracksList } from "@/features/tracks/ui/TracksList/TracksList.tsx";
+import s from './Home.module.css';
 
 export const Home = () => {
+    const { data: playlistsData, isLoading: isPlaylistsLoading } = useFetchPlaylistsQuery({ pageSize: 5 });
+    const { data: tracksData, isLoading: isTracksLoading } = useFetchLastTracksQuery({ pageSize: 10 });
 
-    const {data, isLoading} = useFetchPlaylistsQuery({pageSize: 10})
-
-    // const { data: tracksData } = useFetchLastTracksQuery({ pageSize: 10 });
-
-    // const tracks = tracksData?.data || []
+    const playlists = playlistsData?.data || [];
+    const tracks = tracksData?.data || [];
+    const included = tracksData?.included || [];
 
     return (
         <section className={s.home}>
-            <div>
-                <h2>New playlists</h2>
-                {isLoading ? (
-                    <div className={s.playlistsGrid}>
-                        {Array.from({ length: 10 }).map((_, index) => (
-                            <PlaylistSkeleton key={index} />
-                        ))}
-                    </div>
-                ) : (
-                    <PlaylistsList playlists={data?.data || []} isPlaylistLoading={isLoading} />
-                )}
-            </div>
-            <div>
-                {/*<h2>New tracks</h2>*/}
-                {/*<TracksList tracks={tracks}/>*/}
-            </div>
 
+            {!isPlaylistsLoading && playlists.length > 0 && <h2 className={s.title}>New playlists</h2>}
+            <PlaylistsList playlists={playlists} isLoading={isPlaylistsLoading} isTitleSkeleton={true}/>
 
+            {!isTracksLoading && tracks.length > 0 && <h2 className={s.title}>New tracks</h2>}
+            <TracksList tracks={tracks} included={included} isLoading={isTracksLoading} isTitleSkeleton={true}/>
         </section>
-    )
-}
+    );
+};
