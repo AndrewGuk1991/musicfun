@@ -38,14 +38,14 @@ export const PlaylistDescription = ({ attributes, playlistId }: Props) => {
 
     return (
         <>
-            <p>{attributes.title}</p>
-            <p>
+            <p className={s.title}>{attributes.title}</p>
+            <p className={s.madeFor}>
                 Made for
                 <span className={s.userName}>{attributes.user.name}</span>
             </p>
             <p className={s.metaInfo}>
                 <span>{attributes.tracksCount} Tracks</span>
-                <span className={s.separator}>&bull;</span>
+                <span className={s.separator}></span>
                 <span>Created {relativeDate}</span>
             </p>
 

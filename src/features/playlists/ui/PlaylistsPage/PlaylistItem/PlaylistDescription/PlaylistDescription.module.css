@@ -1,17 +1,41 @@
+
+.title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 171%;
+    margin: 4px 0;
+}
+
+.madeFor {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
 .userName {
     border-bottom: 1px solid var(--color-light-light);
-    display: inline-block;
     margin-left: 6px;
+    color: var(--color-light-light);
 }
 
 .metaInfo {
     display: flex;
     align-items: center;
+    text-align: center;
     gap: 6px;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--color-gray-300);
+    margin: 4px 0;
 }
 
 .separator {
-    color: var(--color-gray-500);
-    font-size: 1.2em;
-    line-height: 1;
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background-color: var(--color-gray-300);
+    border-radius: 50%;
+    vertical-align: middle;
 }
+
