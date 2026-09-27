@@ -10,11 +10,12 @@
 
 .cover {
     width: 112px;
-    height: 102px;
+    height: 100px;
     object-fit: cover;
 }
 
 .title {
+    margin-top: 4px;
     font-weight: 600;
     font-size: 14px;
     height: 39px;
@@ -24,6 +25,7 @@
 }
 
 .artist {
+    margin: 4px 0;
     font-weight: 500;
     font-size: 13px;
     color: var(--color-gray-300);

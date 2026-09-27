@@ -14,7 +14,7 @@ import {truncateText} from "@/common/utils";
 
 type Props = {
     track: TrackData
-    included: TracksIncluded[]
+    included?: TracksIncluded[]
 }
 
 export const TrackItem = ({track, included = []}: Props) => {
