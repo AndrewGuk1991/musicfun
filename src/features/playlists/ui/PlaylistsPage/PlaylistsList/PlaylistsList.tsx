@@ -3,18 +3,15 @@ import {PlaylistItem} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/P
 import {useMemo} from "react";
 import type {PlaylistData} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 
-import {TitleSkeleton} from "@/common/components/Skeletons/TitleSkeleton/TitleSkeleton.tsx";
-
 import {PlaylistsGridSkeleton} from "@/common/components/Skeletons/PlaylistsGridSkeleton/PlaylistsGridSkeleton.tsx";
 
 type Props = {
     playlists: PlaylistData[]
     isLoading: boolean
     countSkeleton?: number
-    isTitleSkeleton: boolean
 }
 
-export const PlaylistsList = ({ playlists, isLoading, countSkeleton, isTitleSkeleton }: Props) => {
+export const PlaylistsList = ({ playlists, isLoading, countSkeleton }: Props) => {
     // const [activePlaylist, setActivePlaylist] = useState<PlaylistData | null>(null)
     // const [isFormSubmitting, setIsFormSubmitting] = useState(false)
     // const [deletePlaylist] = useDeletePlaylistMutation()
@@ -42,19 +39,12 @@ export const PlaylistsList = ({ playlists, isLoading, countSkeleton, isTitleSkel
     // --- Логика рендеринга состояний ---
 
     // 1. Состояние загрузки
-    if (isLoading) {
-        return (
-            <>
-                {isTitleSkeleton && <TitleSkeleton />}
-                <PlaylistsGridSkeleton count={countSkeleton || 5} />
-            </>
-        )
-    }
+    if (isLoading) return <PlaylistsGridSkeleton count={countSkeleton || 5} />
+
 
     // 2. Состояние "Не найдено"
-    if (!uniquePlaylists.length) {
-        return <h2 className={s.title}>Playlists not found</h2>
-    }
+    if (!uniquePlaylists.length) return <h2 className={s.title}>Playlists not found</h2>
+
 
     // 3. Успешный рендер данных
     return (
