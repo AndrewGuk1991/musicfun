@@ -1,16 +1,9 @@
 
-
-.list {
+.tracksGrid {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 24px;
 }
 
-.item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
