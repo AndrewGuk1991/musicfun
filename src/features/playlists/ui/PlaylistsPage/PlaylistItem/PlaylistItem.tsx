@@ -8,32 +8,31 @@ import s from './PlaylistItem.module.css'
 
 type Props = {
     playlist: PlaylistData
-    deletePlaylistHandler: (playlistId: string) => void
-    editPlaylistHandler: (playlist: PlaylistData) => void
+    deletePlaylistHandler?: (playlistId: string) => void
+    editPlaylistHandler?: (playlist: PlaylistData) => void
 }
 
-export const PlaylistItem = memo(({ playlist, deletePlaylistHandler, editPlaylistHandler }: Props) => {
+export const PlaylistItem = memo(({ playlist }: Props) => {
     const originalCover = playlist.attributes.images.main?.find(img => img.type === 'original')
     const src = originalCover?.url || defaultCover
 
-    const handleDelete = () => deletePlaylistHandler(playlist.id)
-    const handleEdit = () => editPlaylistHandler(playlist)
+    // const handleDelete = () => deletePlaylistHandler(playlist.id)
+    // const handleEdit = () => editPlaylistHandler(playlist)
 
 
     return (
         <div className={s.item}>
             <img className={s.cover} src={src} alt="cover" />
             <PlaylistDescription attributes={playlist.attributes} playlistId={playlist.id} />
-            <div className={s.buttonsWrapper}>
-                <button type="button" className={s.actionButton} onClick={handleDelete}>
-                    delete
-                </button>
-                <button type="button" className={s.actionButton} onClick={handleEdit}>
-                    update
-                </button>
-            </div>
+            {/*<div className={s.buttonsWrapper}>*/}
+            {/*    <button type="button" className={s.actionButton} onClick={handleDelete}>*/}
+            {/*        delete*/}
+            {/*    </button>*/}
+            {/*    <button type="button" className={s.actionButton} onClick={handleEdit}>*/}
+            {/*        update*/}
+            {/*    </button>*/}
+            {/*</div>*/}
         </div>
     )
 })
 
-PlaylistItem.displayName = 'PlaylistItem'

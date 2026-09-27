@@ -11,33 +11,26 @@
 .cover {
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 248 / 153;
+    height: 153px;
     object-fit: cover;
-    transition: opacity 0.2s ease;
 }
 
-@media (max-width: 768px) {
-    .cover {
-        aspect-ratio: 174 / 153;
-    }
-}
+/*.actionButton {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    background: none;*/
+/*    border: 1px solid #7f7f7f;*/
+/*    padding: 4px 8px;*/
+/*    color: var(--color-light-light);*/
+/*    cursor: pointer;*/
+/*    transition: color 0.2s ease;*/
+/*}*/
 
-.actionButton {
-    display: flex;
-    align-items: center;
-    background: none;
-    border: 1px solid #7f7f7f;
-    padding: 4px 8px;
-    color: var(--color-light-light);
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
-
-.buttonsWrapper {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-    width: 100%;
-}
+/*.buttonsWrapper {*/
+/*    display: flex;*/
+/*    gap: 8px;*/
+/*    margin-top: 8px;*/
+/*    width: 100%;*/
+/*}*/
 
 
