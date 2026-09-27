@@ -1,6 +1,9 @@
+
 .items {
     display: flex;
-    gap: 8px;
     flex-wrap: wrap;
-    margin-top: 24px;
+    gap: 8px;
+    width: 100%;
+    margin: 24px 0 32px;
 }
+
