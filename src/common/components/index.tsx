@@ -1,5 +1,6 @@
 export {PageNotFound} from './PageNotFound/PageNotFound.tsx'
 export {LinearProgress} from './LinearProgress/LinearProgress.tsx'
 export {Icon} from './Icon/Icon.tsx'
-export {PlaylistSkeleton} from './Skeletons/PlaylistSkeleton.tsx'
+export {PlaylistSkeleton} from './Skeletons/PlaylistSkeleton/PlaylistSkeleton.tsx'
+export {TrackSkeleton} from './Skeletons/TrackSkeleton/TrackSkeleton.tsx'
 export {ReactionActions} from './ReactionActions/ReactionActions.tsx'

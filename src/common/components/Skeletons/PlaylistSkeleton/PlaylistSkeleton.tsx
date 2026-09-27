@@ -7,10 +7,10 @@ export const PlaylistSkeleton = () => {
             <div className={`${s.title} ${s.pulse}`} />
             <div className={`${s.description} ${s.pulse}`} />
             <div className={`${s.likes} ${s.pulse}`} />
-            <div className={s.buttons}>
-                <div className={`${s.button} ${s.pulse}`} />
-                <div className={`${s.button} ${s.pulse}`} />
-            </div>
+            {/*<div className={s.buttons}>*/}
+            {/*    <div className={`${s.button} ${s.pulse}`} />*/}
+            {/*    <div className={`${s.button} ${s.pulse}`} />*/}
+            {/*</div>*/}
         </div>
     )
 }
