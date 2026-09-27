@@ -1,0 +1,16 @@
+.title {
+    width: 140px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #383838 0%, #1d1d1d 100%);
+    animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
