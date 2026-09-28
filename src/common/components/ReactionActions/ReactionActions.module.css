@@ -34,9 +34,9 @@
 }
 
 .likesCount {
+    font-weight: 400;
+    font-size: 10px;
     color: var(--color-gray-300);
-    font-size: 14px;
-    font-weight: 500;
 }
 
 .actionButton svg {
