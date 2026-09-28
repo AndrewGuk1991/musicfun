@@ -30,6 +30,16 @@
     -webkit-appearance: none;
 }
 
+.searchInput:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
 .inputContainer:focus-within .searchIcon {
     color: var(--color-light-light);
+}
+
+.inputContainer:has(.searchInput:disabled) .searchIcon {
+    opacity: 0.5;
 }
