@@ -12,14 +12,18 @@ export const Home = () => {
     const tracks = tracksData?.data || [];
     const included = tracksData?.included || [];
 
+    const showPlaylistsHeader = isPlaylistsLoading || playlists.length > 0;
+    const showTracksHeader = isTracksLoading || tracks.length > 0;
+
     return (
         <section className={s.home}>
+            {/* Блок плейлистов */}
+            {showPlaylistsHeader && <h2 className={s.title}>New playlists</h2>}
+            <PlaylistsList playlists={playlists} isLoading={isPlaylistsLoading}/>
 
-            {!isPlaylistsLoading && playlists.length > 0 && <h2 className={s.title}>New playlists</h2>}
-            <PlaylistsList playlists={playlists} isLoading={isPlaylistsLoading} isTitleSkeleton={true}/>
-
-            {!isTracksLoading && tracks.length > 0 && <h2 className={s.title}>New tracks</h2>}
-            <TracksList tracks={tracks} included={included} isLoading={isTracksLoading} isTitleSkeleton={true}/>
+            {/* Блок треков */}
+            {showTracksHeader && <h2 className={s.title}>New tracks</h2>}
+            <TracksList tracks={tracks} included={included} isLoading={isTracksLoading} />
         </section>
     );
 };
