@@ -1,0 +1,47 @@
+
+.sortContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    width: 180px;
+    flex-shrink: 0;
+    justify-content: flex-end;
+}
+
+.sortLabel {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.sortButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    text-decoration: underline;
+}
+
+.sortButton:hover {
+    opacity: 0.8;
+}
+
+.sortButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.arrow {
+    transition: transform 0.2s ease-in-out;
+    transform-origin: center center;
+    color: var(--color-light-light);
+}
+
+.arrow.rotated {
+    transform: rotate(180deg);
+}
