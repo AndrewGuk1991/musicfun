@@ -4,19 +4,28 @@ import {PlaylistsList} from "@/features/playlists/ui";
 import {type ChangeEvent, useState} from "react";
 import {useDebounceValue} from "@/common/hooks";
 import {Pagination} from "@/common/components/Pagination/Pagination.tsx";
+import {PlaylistsSearch} from "@/features/playlists/ui/PlaylistsPage/PlaylistsSearch/PlaylistsSearch.tsx";
+import {PlaylistsSort} from "@/features/playlists/ui/PlaylistsPage/PlaylistsSort/PlaylistsSort.tsx";
 
 export const PlaylistsPage = () => {
-
+    const [sortDirection, setSortDirection] = useState<'desc' | 'asc'>('desc');
     const [search, setSearch] = useState('')
+
+    const toggleSort = () => {
+        setSortDirection(prev => prev === 'desc' ? 'asc' : 'desc');
+        setCurrentPage(1);
+    };
 
     const debounceSearch = useDebounceValue(search)
     const [currentPage, setCurrentPage] = useState(1)
-    const [pageSize, setPageSize] = useState(2)
+    const [pageSize, setPageSize] = useState(10)
 
     const {data, isLoading} = useFetchPlaylistsQuery({
         search: debounceSearch,
         pageNumber: currentPage,
         pageSize,
+        sortBy: 'addedAt',
+        sortDirection,
 
     })
 
@@ -30,24 +39,44 @@ export const PlaylistsPage = () => {
         setCurrentPage(1)
     }
 
-    if (isLoading) return <h1>Skeleton loader...</h1>
+    const hasData = isLoading || (data?.data && data.data.length > 0);
 
     return (
         <div className={s.container}>
-            <h1>Playlists page</h1>
-            <input
-                type="search"
-                placeholder={'Search playlist by title'}
-                onChange={(e) => searchPlaylistHandler(e)}
+            {hasData && (
+                <>
+                    <h1 className={s.title}>All Playlists</h1>
+
+                    <div className={s.searchWrapper}>
+                        <PlaylistsSearch
+                            value={search}
+                            onChange={searchPlaylistHandler}
+                            isLoading={isLoading}
+                        />
+                        <PlaylistsSort
+                            sortDirection={sortDirection}
+                            onToggleSort={toggleSort}
+                            isLoading={isLoading}
+                        />
+                    </div>
+                </>
+            )}
+
+            <PlaylistsList
+                playlists={data?.data || []}
+                isLoading={isLoading}
+                countSkeleton={pageSize}
             />
-           <PlaylistsList playlists={data?.data || []} isPlaylistLoading={isLoading} />
-            <Pagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                pagesCount={data?.meta.pagesCount || 1}
-                pageSize={pageSize}
-                changePageSize={changePageSizeHandler}
-            />
+
+            {hasData && (
+                <Pagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    pagesCount={data?.meta.pagesCount || 1}
+                    pageSize={pageSize}
+                    changePageSize={changePageSizeHandler}
+                />
+            )}
         </div>
     )
 }

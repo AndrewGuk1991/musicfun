@@ -1,6 +1,29 @@
-
 .container {
+    padding: 32px 32px;
+    background: linear-gradient(180deg, #3333a3 5.09%, #121212 33.4%);
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    height: 100%;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 24px;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 100%;
+    gap: 24px;
+    margin-bottom: 8px;
+}
+
+.playlistsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px;
 }
