@@ -1,21 +1,22 @@
 import {type ChangeEvent} from "react";
+import s from './SearchElement.module.css'
 import {Icon} from "@/common/components";
-import s from './PlaylistsSearch.module.css'
 
 interface Props {
     value: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     isLoading?: boolean;
+    placeholder?: string;
 }
 
-export const PlaylistsSearch = ({value, onChange, isLoading}: Props) => {
+export const SearchElement = ({value, onChange, isLoading, placeholder = "Search..."}: Props) => {
     return (
         <div className={s.inputContainer}>
             <Icon className={s.searchIcon} id="icon-search"/>
             <input
                 className={s.searchInput}
                 type="search"
-                placeholder="Search playlist"
+                placeholder={placeholder}
                 value={value}
                 onChange={onChange}
                 disabled={isLoading}
