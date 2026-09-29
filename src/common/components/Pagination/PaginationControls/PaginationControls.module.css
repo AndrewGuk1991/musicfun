@@ -1,26 +1,56 @@
-
-
 .pagination {
     display: flex;
-    gap: 8px;
+    align-items: center;
     justify-content: center;
+    gap: 6px;
+    user-select: none;
 }
 
 .pageButton {
-    padding: 4px 10px;
-    background: white;
-    border: 1px solid #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--color-gray-800);
+    border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    outline: none;
 }
 
+/* Эффект ховера для доступных кнопок */
+.pageButton:hover:not(:disabled) {
+    background-color: var(--color-gray-600);
+}
+
+
 .pageButtonActive {
-    background: #ececec;
+    background-color: var(--color-crimson-300);
+}
+
+/* Состояние блокировки во время загрузки или на краях списка (1-я и последняя страницы) */
+.pageButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Чтобы активная страница при isLoading оставалась яркой и не меняла прозрачность */
+.pageButtonActive:disabled {
+    opacity: 1;
     cursor: default;
 }
 
+/* Оформление многоточия */
 .ellipsis {
-    padding: 4px 10px;
-    color: #888;
-    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    font-weight: 600;
+    font-size: 16px;
 }
