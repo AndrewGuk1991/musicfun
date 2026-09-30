@@ -7,25 +7,30 @@ import {reactionUserResponseSchema} from "@/common/schemas";
 
 export const tracksApi = baseApi.injectEndpoints({
     endpoints: build => ({
-        fetchTracks: build.infiniteQuery<FetchTracksResponse, void, string | null>({
+        fetchTracks: build.infiniteQuery<FetchTracksResponse, { search?: string }, string | null>({
             infiniteQueryOptions: {
                 initialPageParam: null,
                 getNextPageParam: (lastPage) => (
                     lastPage.meta.nextCursor || null
                 )
             },
-            query: ({pageParam}) => ({
+            query: ({pageParam, queryArg}) => ({
                 url: 'playlists/tracks',
-                params: {cursor: pageParam, paginationType: 'cursor', pageSize: 5}
+                params: {
+                    cursor: pageParam,
+                    paginationType: 'cursor',
+                    pageSize: 5,
+                    ...(queryArg?.search ? { search: queryArg.search } : {})
+                }
             }),
             //  ИСПРАВЛЕНО: Безопасно собираем ID треков со всех загруженных страниц пагинации
-            providesTags: (result) =>
+            providesTags: (result, _error, arg) =>
                 result
                     ? [
                         ...result.pages.flatMap((page) =>
                             page.data.map(({ id }) => ({ type: 'Track' as const, id }))
                         ),
-                        { type: 'Track', id: 'LIST' },
+                        { type: 'Track', id: `LIST_${arg.search || 'ALL'}` },
                     ]
                     : [{ type: 'Track', id: 'LIST' }],
             ...withZodCatch(fetchTracksResponseSchema)
