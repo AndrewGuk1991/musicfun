@@ -1,23 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-// Заменили interface на type
 type PlayerState = {
     isPlaying: boolean;
     currentTrackId: string | null;
+    trackUrl: string | null;
 };
 
 const initialState: PlayerState = {
     isPlaying: false,
     currentTrackId: null,
+    trackUrl: null,
 };
 
 export const playerSlice = createSlice({
     name: 'player',
     initialState,
     reducers: {
-        playTrack: (state, action: PayloadAction<string>) => {
-            state.currentTrackId = action.payload;
+        playTrack: (state, action: PayloadAction<{ id: string; url: string }>) => {
+            state.currentTrackId = action.payload.id;
+            state.trackUrl = action.payload.url;
             state.isPlaying = true;
         },
         pauseTrack: (state) => {
@@ -31,6 +33,7 @@ export const playerSlice = createSlice({
         stopPlayer: (state) => {
             state.isPlaying = false;
             state.currentTrackId = null;
+            state.trackUrl = null;
         },
     },
 });
