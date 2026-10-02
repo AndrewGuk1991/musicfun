@@ -1,0 +1,159 @@
+.item {
+    display: grid;
+    grid-template-columns: 320px 1fr 183px 1fr 150px auto 110px;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    transition: background-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.activeItem {
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.description {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    height: 61px; /* Фиксируем общую высоту */
+}
+
+/* --- ИСПРАВЛЕННЫЙ БЛОК: Задаем одинаковое поведение для цифры и плеера --- */
+.number,
+.playingContainer {
+    width: 45px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.number {
+    color: var(--color-gray-300);
+    font-weight: 400;
+    font-size: 22px;
+}
+
+.activeNumber {
+    color: var(--color-crimson-400);
+    font-weight: 600;
+}
+
+
+.bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 1px;
+    width: 12px;
+    height: 18px;
+}
+
+.bar {
+    width: 3px;
+    height: 100%;
+    background-color: var(--color-crimson-400);
+    animation: bounce 1s ease-in-out infinite alternate;
+}
+
+.bar:nth-child(1) { animation-delay: 0.1s; animation-duration: 0.4s; }
+.bar:nth-child(2) { animation-delay: 0.3s; animation-duration: 0.7s; }
+.bar:nth-child(3) { animation-delay: 0.0s; animation-duration: 0.5s; }
+.bar:nth-child(4) { animation-delay: 0.5s; animation-duration: 0.6s; }
+
+@keyframes bounce {
+    0% { height: 20%; }
+    100% { height: 100%; }
+}
+
+.cover {
+    height: 52px;
+    width: 52px;
+    object-fit: cover;
+    flex-shrink: 0;
+    /* Задаем фиксированный и жесткий отступ от зоны номера до обложки */
+    margin-left: 22px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+    /* Ваше оригинальное расстояние от обложки до текста названия */
+    margin-left: 21px;
+}
+
+.title {
+    font-weight: 400;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activeTitle {
+    color: var(--color-crimson-400);
+}
+
+.artist {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--color-gray-300);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Полоска воспроизведения */
+.progressBarContainer {
+    width: 183px;
+    height: 4px;
+    border-radius: 4px;
+    position: relative;
+    cursor: default;
+    overflow: hidden;
+    transition: background-color 0.2s ease;
+}
+
+.progressBarActive {
+    cursor: pointer;
+    background: var(--color-light-light);
+    opacity: 0.5;
+}
+
+.progressBarFill {
+    height: 100%;
+    background-color: var(--color-crimson-400);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+}
+
+.dateAdded {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--color-gray-300);
+    white-space: nowrap;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.timing {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-align: right;
+    padding-right: 8px;
+}
