@@ -1,0 +1,22 @@
+.progressBarContainer {
+    width: 183px;
+    height: 4px;
+    border-radius: 4px;
+    position: relative;
+    cursor: default;
+    overflow: hidden;
+    transition: background-color 0.2s ease;
+}
+
+.progressBarActive {
+    cursor: pointer;
+    background: var(--color-light-light);
+    opacity: 0.5;
+}
+
+.progressBarFill {
+    height: 100%;
+    background-color: var(--color-crimson-400);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+}
