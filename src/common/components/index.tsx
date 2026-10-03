@@ -5,3 +5,5 @@ export {PlaylistSkeleton} from './Skeletons/PlaylistSkeleton/PlaylistSkeleton.ts
 export {TrackSkeleton} from './Skeletons/TrackSkeleton/TrackSkeleton.tsx'
 export {SearchElement} from './SearchElement/SearchElement.tsx'
 export {ReactionActions} from './ReactionActions/ReactionActions.tsx'
+export {PlayingBars} from './PlayingBars/PlayingBars.tsx'
+export {TrackProgressBar} from './TrackProgressBar/TrackProgressBar.tsx'
