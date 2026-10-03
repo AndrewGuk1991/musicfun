@@ -1,4 +1,4 @@
-import s from "./TrackRow.module.css";
+import s from "./PlayingBars.module.css";
 
 export const PlayingBars = () => {
     return (
