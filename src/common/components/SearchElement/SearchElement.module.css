@@ -1,7 +1,8 @@
 
 .inputContainer {
     position: relative;
-    flex-grow: 1;
+    width: 100%;
+    min-width: 0;
 }
 
 .searchIcon {
@@ -24,7 +25,6 @@
     color: var(--color-light-light);
     font-weight: 500;
     font-size: 16px;
-    line-height: 56px;
     outline: none;
     appearance: none;
     -webkit-appearance: none;
