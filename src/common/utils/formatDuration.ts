@@ -1,5 +1,5 @@
-
 export const formatDuration = (seconds: number): string => {
+    if (isNaN(seconds) || seconds < 0) return "0:00"; // защита от пустых метаданных
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
