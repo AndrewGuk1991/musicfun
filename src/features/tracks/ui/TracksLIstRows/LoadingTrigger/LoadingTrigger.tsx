@@ -6,6 +6,7 @@ type Props = {
     isFetchingNextPage: boolean
 }
 
+
 export const LoadingTrigger = ({observerRef, isFetchingNextPage}: Props) => {
     return (
         <div ref={observerRef} className={s.triggerContainer}>
