@@ -24,17 +24,13 @@
     height: 61px;
 }
 
-.number,
-.playingContainer {
+.number {
     padding-left: 7px;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     flex-shrink: 0;
-}
-
-.number {
     color: var(--color-gray-300);
     font-weight: 400;
     font-size: 22px;
@@ -43,31 +39,6 @@
 .activeNumber {
     color: var(--color-crimson-400);
     font-weight: 600;
-}
-
-.bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 1px;
-    width: 12px;
-    height: 18px;
-}
-
-.bar {
-    width: 3px;
-    height: 100%;
-    background-color: var(--color-crimson-400);
-    animation: bounce 1s ease-in-out infinite alternate;
-}
-
-.bar:nth-child(1) { animation-delay: 0.1s; animation-duration: 0.4s; }
-.bar:nth-child(2) { animation-delay: 0.3s; animation-duration: 0.7s; }
-.bar:nth-child(3) { animation-delay: 0.0s; animation-duration: 0.5s; }
-.bar:nth-child(4) { animation-delay: 0.5s; animation-duration: 0.6s; }
-
-@keyframes bounce {
-    0% { height: 20%; }
-    100% { height: 100%; }
 }
 
 .cover {
@@ -107,30 +78,6 @@
     text-overflow: ellipsis;
 }
 
-/* Полоска воспроизведения */
-.progressBarContainer {
-    width: 183px;
-    height: 4px;
-    border-radius: 4px;
-    position: relative;
-    cursor: default;
-    overflow: hidden;
-    transition: background-color 0.2s ease;
-}
-
-.progressBarActive {
-    cursor: pointer;
-    background: var(--color-light-light);
-    opacity: 0.5;
-}
-
-.progressBarFill {
-    height: 100%;
-    background-color: var(--color-crimson-400);
-    border-radius: 4px;
-    transition: width 0.1s linear;
-}
-
 .dateAdded {
     font-weight: 400;
     font-size: 18px;
@@ -145,7 +92,7 @@
 }
 
 .timing {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
     letter-spacing: -0.03em;
     color: #fff;
