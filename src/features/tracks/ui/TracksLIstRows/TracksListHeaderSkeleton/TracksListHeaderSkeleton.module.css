@@ -1,0 +1,50 @@
+.headerSkeleton {
+    display: grid;
+    grid-template-columns: 42px 52px 160px 1fr 150px 54px 110px;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--color-gray-600);
+    box-sizing: border-box;
+    height: 61px; /* Высота оригинальной шапки */
+}
+
+.skeletonBlock {
+    background: linear-gradient(90deg, #383838 0%, #1d1d1d 100%);
+    border-radius: 4px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.colIndex {
+    width: 16px;
+    height: 18px;
+    margin-left: 10px;
+}
+
+.colTitle {
+    width: 60px;
+    height: 16px;
+}
+
+.dateAddedHeader {
+    width: 90px;
+    height: 16px;
+}
+
+.colDuration {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 16px;
+}
+
+.clock {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
