@@ -1,0 +1,102 @@
+.skeletonItem {
+    display: grid;
+    grid-template-columns: 320px 1fr 183px 1fr 150px auto 110px;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    height: 81px; /* Высота строки с учетом padding (10+10) и высоты описания (61) */
+}
+
+/* Базовый блок скелетона с твоим градиентом и анимацией пульсации */
+.skeletonBlock {
+    background: linear-gradient(90deg, #383838 0%, #1d1d1d 100%);
+    border-radius: 4px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.description {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 61px;
+}
+
+/* Скелетон для номера трека */
+.number {
+    width: 24px;
+    height: 24px;
+    margin-left: 7px;
+}
+
+/* Скелетон для обложки */
+.cover {
+    height: 52px;
+    width: 52px;
+    margin-left: 22px;
+    flex-shrink: 0;
+}
+
+/* Контейнер для текстов */
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 21px;
+    width: 150px;
+}
+
+/* Полоски названия и артиста */
+.title {
+    height: 18px;
+    width: 100%;
+}
+
+.artist {
+    height: 14px;
+    width: 70%;
+}
+
+/* Скелетон для полосы прогресса */
+.progressBar {
+    width: 183px;
+    height: 4px;
+}
+
+/* Скелетон для даты добавления */
+.dateAdded {
+    width: 100px;
+    height: 16px;
+}
+
+/* Скелетон для блока лайка */
+.actions {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* Лайки обычно круглые */
+}
+
+/* Скелетон времени трека (выравнивание вправо) */
+.timingContainer {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 8px;
+}
+
+.timing {
+    width: 45px;
+    height: 16px;
+}
+
+/* Анимация плавного перелива */
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
