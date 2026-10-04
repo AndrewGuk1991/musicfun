@@ -1,4 +1,3 @@
-
 .main {
     max-width: 1730px;
     margin: 0 auto;
@@ -36,7 +35,6 @@
 
     .content {
         padding: 16px;
-        margin-bottom: 70px;
         background-color: #ffffff;
     }
 }
