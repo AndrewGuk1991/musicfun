@@ -16,6 +16,11 @@ export const useGlobalLoading = () => {
         const hasActiveQueries = queries.some(query => {
             if (query?.status !== 'pending') return
 
+            // 1. СТРАНИЦА TRACKS: Полностью отключаем полоску всегда (и при первой загрузке, и при скролле)
+            if (query.endpointName === tracksApi.endpoints.fetchTracks.name) {
+                return false;
+            }
+
             if (excludedEndpoints.includes(query.endpointName)) {
                 const completedQueries = queries.filter(query => query?.status === 'fulfilled')
                 return completedQueries.length > 0
