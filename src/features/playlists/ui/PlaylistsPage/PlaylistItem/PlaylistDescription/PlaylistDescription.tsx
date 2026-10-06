@@ -1,7 +1,7 @@
 import type { PlaylistAttributes } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import s from './PlaylistDescription.module.css'
 import {ReactionActions} from "@/common/components";
-import { useRelativeDate } from "@/common/utils";
+
 import {
     useDislikePlaylistMutation,
     useLikePlaylistMutation,
@@ -10,7 +10,7 @@ import {
 import { CurrentUserReaction } from "@/common/enums";
 
 import type {CurrentUserReactionValue} from "@/common/types";
-import {useReactionHandler} from "@/common/hooks";
+import {useReactionHandler, useRelativeDate} from "@/common/hooks";
 
 type Props = {
     attributes: PlaylistAttributes,
