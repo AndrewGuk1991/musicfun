@@ -1,45 +1,58 @@
+
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import s from "./TrackRow.module.css";
-import type {RootState} from "@/app/model/store.ts";
-import {useTrackAudioProgress, useTrackMetadata, useTrackReactions} from "@/common/hooks";
-import {formatDuration} from "@/common/utils";
-import {pauseTrack, playTrack} from "@/features/tracks/model/playerSlice.ts";
-import {PlayingBars, ReactionActions, TrackProgressBar} from "@/common/components";
-import type {TrackData, TracksIncluded} from "@/features/tracks/api/tracksApi.types.ts";
+import type { RootState } from "@/app/model/store.ts";
+import { useTrackMetadata, useTrackReactions } from "@/common/hooks";
+import { formatDuration } from "@/common/utils";
+import { PlayingBars, ReactionActions, TrackProgressBar } from "@/common/components";
+import type { TrackData, TracksIncluded } from "@/features/tracks/api/tracksApi.types.ts";
+import type {TrackItem} from "@/app/model/player.types.ts";
+import {pauseTrack, seekTrack} from "@/app/model/playerSlice.ts";
 
-type Props = {
+type TrackRowProps = {
     track: TrackData;
     index: number;
     included?: TracksIncluded[];
+    onPlay: (trackItem: TrackItem) => void;
 };
 
-export const TrackRow = React.memo(({ track, index, included = [] }: Props) => {
+export const TrackRow = React.memo(({ track, index, included = [], onPlay }: TrackRowProps) => {
     const dispatch = useDispatch();
-    const { currentTrackId, isPlaying } = useSelector((state: RootState) => state.player);
+
+    // 1. Стабильные селекторы: меняются редко (только при клике на паузу или смене трека).
+    // Пассивные строки больше не будут перерисовываться при изменении секунд в плеере.
+    const currentTrackId = useSelector((state: RootState) => state.player.currentTrackId);
+    const isPlaying = useSelector((state: RootState) => state.player.isPlaying);
 
     const isCurrentTrack = currentTrackId === track.id;
     const isTrackPlayingNow = isCurrentTrack && isPlaying;
 
-    // 1. Парсинг метаданных трека
+    // 2. Динамические селекторы времени: подписывают на обновления ТОЛЬКО активный трек.
+    // Для остальных строк они всегда возвращают 0, полностью блокируя лишние ререндеры.
+    const currentTime = useSelector((state: RootState) => isCurrentTrack ? state.player.currentTime : 0);
+    const duration = useSelector((state: RootState) => isCurrentTrack ? state.player.duration : 0);
+
+    // Парсинг метаданных трека
     const { coverSrc, artistName, truncatedTitle, relativeDate, audioUrl } = useTrackMetadata(track, included);
 
-    // 2. Логика синхронизации времени и прогресс-бара
-    const { duration: localDuration, progressPercent, handleProgressClick } = useTrackAudioProgress(isCurrentTrack, audioUrl);
-
-    // 3. Логика лайков/дизлайков и обращений к API
+    // Логика лайков/дизлайков и обращений к API
     const { currentReaction, isAnyActionLoading, handleLikeClick, handleDislikeClick, likesCount } = useTrackReactions(track);
 
-    // Вычисление итоговой длительности для вывода на экран
-    const displayDuration = isCurrentTrack && localDuration > 0
-        ? formatDuration(localDuration)
+    // Вычисляем процент заполнения шкалы только для активной строки
+    const progressPercent = isCurrentTrack && duration > 0 ? (currentTime / duration) * 100 : 0;
+
+    // Вычисление итоговой длительности (динамическая во время воспроизведения, нативная в покое)
+    const displayDuration = isCurrentTrack && duration > 0
+        ? formatDuration(duration)
         : formatDuration(track.attributes.duration || 0);
 
     const handlePlayToggle = () => {
         if (isTrackPlayingNow) {
             dispatch(pauseTrack());
         } else {
-            dispatch(playTrack({
+            // Передаем плоский объект типа TrackItem наверх в обработчик родителя
+            onPlay({
                 id: track.id,
                 url: audioUrl,
                 data: {
@@ -47,8 +60,20 @@ export const TrackRow = React.memo(({ track, index, included = [] }: Props) => {
                     artistName: artistName,
                     coverUrl: coverSrc
                 }
-            }));
+            });
         }
+    };
+
+    // Функция перемотки по клику на полосу прогресса внутри текущей строки
+    const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isCurrentTrack || duration === 0) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const clickPercent = (e.clientX - rect.left) / rect.width;
+        const targetSeconds = clickPercent * duration;
+
+        // Отправляем запрос на перемотку в Redux. Хук useAudioPlayer поймает его и применит к аудиофайлу
+        dispatch(seekTrack(targetSeconds));
     };
 
     return (
