@@ -1,10 +1,10 @@
-// features/tracks/hooks/useTracksQueueSync.ts
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { playTrack, updateQueue, type TrackItem } from "@/features/tracks/model/playerSlice.ts";
 import { getTrackMetadata } from "@/features/tracks/lib/getTrackMetadata.ts";
 import type { RootState } from "@/app/model/store.ts";
 import type { TrackData, TracksIncluded } from "@/features/tracks/api/tracksApi.types.ts";
+import type {TrackItem} from "@/app/model/player.types.ts";
+import {playTrack, updateQueue} from "@/app/model/playerSlice.ts";
 
 type UseTracksQueueSyncProps = {
     tracks: TrackData[];
