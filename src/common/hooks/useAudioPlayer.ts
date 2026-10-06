@@ -1,16 +1,9 @@
-// features/tracks/hooks/useAudioPlayer.ts
 import { useEffect, useRef, useState } from 'react';
 import type { MouseEvent, ChangeEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '@/app/model/store.ts';
-import {
-    pauseTrack,
-    playTrack,
-    nextTrack,
-    prevTrack,
-    updateProgress,
-    clearSeek
-} from "@/features/tracks/model/playerSlice.ts";
+import {clearSeek, nextTrack, pauseTrack, playTrack, prevTrack, updateProgress} from "@/app/model/playerSlice.ts";
+
 
 export const useAudioPlayer = () => {
     const dispatch = useDispatch();
