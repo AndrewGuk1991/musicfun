@@ -11,12 +11,14 @@ export const App = () => {
     return (
         <div className={s.main}>
             <Header />
+
+            {isGlobalLoading && (
+                <div className={s.progressWrapper}>
+                    <LinearProgress />
+                </div>
+            )}
+
             <div className={s.layout}>
-                {isGlobalLoading && (
-                    <div className={s.progressWrapper}>
-                        <LinearProgress />
-                    </div>
-                )}
                 <Sidebar />
                 <main className={s.content}>
                     <Routing />

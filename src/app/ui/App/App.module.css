@@ -1,6 +1,7 @@
 .main {
     max-width: 1730px;
     margin: 0 auto;
+    position: relative;
 }
 
 .layout {
@@ -14,11 +15,13 @@
 }
 
 .progressWrapper {
-    position: absolute;
+    position: sticky;
     top: 0;
+
     left: 0;
     right: 0;
-    z-index: 999;
+    width: 100%;
+    z-index: 9999;
 }
 
 .content {
@@ -28,6 +31,10 @@
 }
 
 @media (max-width: 767px) {
+    .progressWrapper {
+        top: 60px;
+    }
+
     .layout {
         flex-direction: column;
         min-height: calc(100vh - 60px);
