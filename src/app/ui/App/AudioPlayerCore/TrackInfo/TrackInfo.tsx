@@ -9,7 +9,7 @@ type TrackInfoProps = {
 
 export const TrackInfo = ({ coverUrl, title, artistName }: TrackInfoProps) => {
 
-    const truncatedTitle = truncateText(title, 30);
+    const truncatedTitle = truncateText(title, 24);
 
     return (
         <div className={s.trackInfoBlock}>
