@@ -1,0 +1,40 @@
+.progressRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.timeLabel {
+    font-size: 16px;
+    color: var(--color-gray-400);
+    font-weight: 400;
+    min-width: 45px;
+}
+
+.progressBarContainer {
+    flex: 1;
+    height: 5px;
+    background-color: var(--color-gray-800);
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+.progressBarFill {
+    height: 100%;
+    background-color: var(--color-gray-300);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    position: relative;
+}
+
+
+.progressBarContainer:hover .progressBarFill {
+    background-color: var(--color-light-light);
+}
+
+
+.progressBarContainer:hover .progressBarFill::after {
+    opacity: 1;
+}
