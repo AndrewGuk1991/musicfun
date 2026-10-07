@@ -1,0 +1,33 @@
+.trackInfoBlock {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.cover {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+}
+
+.textMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.artist {
+    font-size: 16px;
+    color: var(--color-gray-300);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
