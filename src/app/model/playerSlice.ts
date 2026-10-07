@@ -20,22 +20,20 @@ export const playerSlice = createSlice({
     name: 'player',
     initialState,
     reducers: {
-        // Запуск конкретного трека + передача всего списка треков со страницы в очередь
-        playTrack: (
-            state,
-            action: PayloadAction<{ track: TrackItem; tracksList?: TrackItem[] }>
-        ) => {
+        playTrack: (state, action: PayloadAction<{ track: TrackItem; tracksList?: TrackItem[] }>) => {
             const { track, tracksList } = action.payload;
             state.currentTrackId = track.id;
             state.trackUrl = track.url;
             state.trackData = track.data;
             state.isPlaying = true;
 
-            // Если передан новый список треков (например, зашли на страницу и кликнули по треку)
+            // ИСПРАВЛЕНО: Мгновенно сбрасываем прогресс в сторе при старте нового трека
+            state.currentTime = 0;
+            state.duration = 0;
+
             if (tracksList) {
                 state.originalQueue = tracksList;
                 if (state.isShuffled) {
-                    // Если перемешивание уже включено, мешаем новую очередь, но текущий трек ставим на первое место
                     const filtered = tracksList.filter(t => t.id !== track.id);
                     state.queue = [track, ...filtered.sort(() => Math.random() - 0.5)];
                 } else {
@@ -72,8 +70,6 @@ export const playerSlice = createSlice({
         nextTrack: (state) => {
             if (state.queue.length === 0) return;
             const currentIndex = state.queue.findIndex(t => t.id === state.currentTrackId);
-
-            // Если трек последний — переходим к первому (зацикливание плейлиста)
             const nextIndex = (currentIndex + 1) % state.queue.length;
             const nextTrack = state.queue[nextIndex];
 
@@ -81,12 +77,14 @@ export const playerSlice = createSlice({
             state.trackUrl = nextTrack.url;
             state.trackData = nextTrack.data;
             state.isPlaying = true;
+
+            // ИСПРАВЛЕНО: Сбрасываем время при переходе вперед
+            state.currentTime = 0;
+            state.duration = 0;
         },
         prevTrack: (state) => {
             if (state.queue.length === 0) return;
             const currentIndex = state.queue.findIndex(t => t.id === state.currentTrackId);
-
-            // Если трек первый — переходим к последнему
             const prevIndex = (currentIndex - 1 + state.queue.length) % state.queue.length;
             const prevTrack = state.queue[prevIndex];
 
@@ -94,6 +92,10 @@ export const playerSlice = createSlice({
             state.trackUrl = prevTrack.url;
             state.trackData = prevTrack.data;
             state.isPlaying = true;
+
+            // ИСПРАВЛЕНО: Сбрасываем время при переходе назад
+            state.currentTime = 0;
+            state.duration = 0;
         },
         stopPlayer: (state) => {
             state.isPlaying = false;
