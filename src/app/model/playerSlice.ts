@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type {PlayerState, TrackItem} from "@/app/model/player.types.ts";
 
-
 const initialState: PlayerState = {
     isPlaying: false,
     currentTrackId: null,
