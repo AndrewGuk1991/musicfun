@@ -9,7 +9,7 @@
 .buttonsRow {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
 }
 
 .controlBtn {
@@ -20,28 +20,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
     transition: color 0.2s ease;
 }
 
-.controlBtn:hover {
+.controlBtn:not(.activeControl):hover {
     color: var(--color-light-light);
 }
 
 .activeControl {
-    color: var(--color-orange-500) !important;
+    color: var(--color-crimson-400);
+}
+
+.activeControl:hover {
+    color: var(--color-crimson-200);
 }
 
 .mainPlayBtn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: none;
-    background-color: var(--color-light-light);
-    color: var(--color-dark-dark);
+    background-color: var(--color-gray-300);
+    color: var(--color-gray-900);
     cursor: pointer;
     transition: transform 0.2s ease, background-color 0.2s ease;
 }
@@ -51,38 +54,47 @@
     background-color: var(--color-gray-50);
 }
 
-.progressRow {
+.iconControl {
+    position: relative;
+    width: 16px;
+    height: 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    width: 100%;
+    justify-content: center;
 }
 
-.timeLabel {
-    font-size: 11px;
-    color: var(--color-gray-400);
-    min-width: 35px;
-    text-align: center;
-    user-select: none;
+.play::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid currentColor;
+    background: transparent;
+    border-radius: 0;
+    transform: translateX(2.5px);
+    transition: transform 0.2s ease;
 }
 
-.progressBarContainer {
-    flex: 1;
-    height: 4px;
-    background-color: var(--color-gray-800);
-    border-radius: 2px;
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
+.play::after {
+    content: none;
 }
 
-.progressBarFill {
-    height: 100%;
-    width: 0%;
-    background-color: var(--color-orange-500);
-    border-radius: 2px;
+.pause::before,
+.pause::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 9px);
+    width: 5px;
+    height: 18px;
+    background-color: currentColor;
+    border-radius: 1px;
 }
 
-.progressBarContainer:hover .progressBarFill {
-    background-color: var(--color-orange-400);
+.pause::before {
+    left: 1px;
+}
+
+.pause::after {
+    right: 1px;
 }
