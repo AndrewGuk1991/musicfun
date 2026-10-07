@@ -1,9 +1,9 @@
+
 import { useEffect, useRef, useState } from 'react';
 import type { MouseEvent, ChangeEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '@/app/model/store.ts';
-import {clearSeek, nextTrack, pauseTrack, playTrack, prevTrack, updateProgress} from "@/app/model/playerSlice.ts";
-
+import { clearSeek, nextTrack, pauseTrack, playTrack, prevTrack, updateProgress } from "@/app/model/playerSlice.ts";
 
 export const useAudioPlayer = () => {
     const dispatch = useDispatch();
@@ -22,15 +22,22 @@ export const useAudioPlayer = () => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [volume, setVolume] = useState(0.5); // Громкость по умолчанию: 50%
 
-    // Инициализируем HTMLAudioElement строго один раз (только в браузере)
-    if (!audioRef.current && typeof window !== 'undefined') {
-        audioRef.current = new Audio();
-    }
+    // 1. Инициализируем HTMLAudioElement строго один раз при монтировании хука
+    useEffect(() => {
+        if (typeof window !== 'undefined' && !audioRef.current) {
+            audioRef.current = new Audio();
+            // Устанавливаем дефолтную громкость в нативный плеер сразу при создании
+            audioRef.current.volume = volume;
+        }
+    }, []);
 
-    // 1. Синхронизация источника звука и состояния воспроизведения с Redux
+    // 2. БЕЗОПАСНАЯ СИНХРОНИЗАЦИЯ: Управление источником звука, воспроизведением и асинхронными Promise
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio || !trackUrl) return;
+
+        // Флаг для отслеживания актуальности текущего цикла эффекта
+        let isEffectActive = true;
 
         if (audio.src !== trackUrl) {
             audio.src = trackUrl;
@@ -38,23 +45,43 @@ export const useAudioPlayer = () => {
         }
 
         if (isPlaying) {
-            audio.play().catch((err) => {
-                console.error("Ошибка воспроизведения аудиофайла:", err);
-                dispatch(pauseTrack());
-            });
+            const playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        // Если пока трек буферизировался, пользователь уже нажал на паузу — останавливаем
+                        if (!isEffectActive) {
+                            audio.pause();
+                        }
+                    })
+                    .catch((err) => {
+                        // Полностью игнорируем системные ошибки прерывания браузера (AbortError),
+                        // они естественны при быстрой смене треков или двойном клике.
+                        if (err.name !== 'AbortError') {
+                            console.error("Реальная ошибка воспроизведения аудиофайла:", err);
+                            dispatch(pauseTrack());
+                        }
+                    });
+            }
         } else {
             audio.pause();
         }
+
+        // При размонтировании эффекта или изменении зависимостей помечаем прошлый поток как неактивный
+        return () => {
+            isEffectActive = false;
+        };
     }, [trackUrl, isPlaying, dispatch]);
 
-    // 2. Синхронизация флага зацикливания трека (атрибут loop)
+    // 3. Синхронизация флага зацикливания трека (атрибут loop)
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.loop = isLooping;
         }
     }, [isLooping]);
 
-    // 3. ЭФФЕКТ ДЛЯ ПЕРЕМОТКИ: Реагирует на клики по прогресс-барам из любого места приложения
+    // 4. ЭФФЕКТ ДЛЯ ПЕРЕМОТКИ: Реагирует на клики по прогресс-барам из любого места приложения
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio || seekTo === null) return;
@@ -63,7 +90,7 @@ export const useAudioPlayer = () => {
         dispatch(clearSeek());       // Сбрасываем флаг запроса перемотки в Redux
     }, [seekTo, dispatch]);
 
-    // 4. Подписка на нативные события прогресса аудиофайла и окончание трека
+    // 5. Подписка на нативные события прогресса аудиофайла и окончание трека
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
