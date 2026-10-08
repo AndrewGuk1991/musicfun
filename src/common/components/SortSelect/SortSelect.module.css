@@ -1,0 +1,74 @@
+.sortContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    justify-content: flex-end;
+}
+
+.sortLabel {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--color-gray-400);
+}
+
+.selectWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.nativeSelect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.nativeSelect:disabled {
+    cursor: not-allowed;
+}
+
+.selectTrigger {
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.nativeSelect:disabled + .selectTrigger {
+    opacity: 0.5;
+}
+
+.sortButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 4px;
+}
+
+.sortButton:hover {
+    opacity: 0.8;
+}
+
+.sortButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.arrow {
+    transition: transform 0.2s ease-in-out;
+    transform-origin: center center;
+    color: var(--color-light-light);
+}
+
+.arrow.rotated {
+    transform: rotate(180deg);
+}
