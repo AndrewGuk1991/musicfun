@@ -1,0 +1,63 @@
+
+.volumeContainer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: default;
+    padding-right: 17px;
+}
+
+/* Очищаем кнопку вокруг иконки */
+.iconButton {
+    background: none;
+    border: none;
+    color: var(--color-gray-400);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.iconButton:hover {
+    color: var(--color-light-light);
+}
+
+
+/* Базовые стили инпута громкости */
+.volumeSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100px;
+    height: 5px;
+    background-color: var(--color-gray-800);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    color: var(--color-gray-200);
+    transition: color 0.2s ease;
+}
+
+
+.volumeSlider:hover {
+    color: var(--color-light-light);
+}
+
+
+/* Скрываем стандартные кружки-бегунки браузеров */
+.volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Скрываем кружок в Firefox */
+.volumeSlider::-moz-range-thumb {
+    width: 0;
+    height: 0;
+    background: transparent;
+    border: none;
+}
