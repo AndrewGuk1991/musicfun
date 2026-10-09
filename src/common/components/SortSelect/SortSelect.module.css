@@ -1,4 +1,6 @@
-.sortContainer {
+
+.sortWrapper {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -7,68 +9,51 @@
     justify-content: flex-end;
 }
 
-.sortLabel {
-    font-weight: 400;
-    font-size: 18px;
-    color: var(--color-gray-400);
-}
-
-.selectWrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.nativeSelect {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.nativeSelect:disabled {
-    cursor: not-allowed;
-}
-
-.selectTrigger {
-    font-size: 18px;
-    font-weight: 700;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.nativeSelect:disabled + .selectTrigger {
-    opacity: 0.5;
-}
-
-.sortButton {
+/* Кнопка-триггер, открывающая меню (объединение .sortButton и .selectTrigger) */
+.sortBtn {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     background: transparent;
     border: none;
     cursor: pointer;
     outline: none;
     padding: 4px;
+
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: underline;
+    color: var(--color-light-light);
+
+    transition: opacity 0.2s ease;
 }
 
-.sortButton:hover {
+.sortBtn:hover {
     opacity: 0.8;
 }
 
-.sortButton:disabled {
+.sortBtn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
+/* Иконка стрелочки-шеврона (из .arrow) */
 .arrow {
     transition: transform 0.2s ease-in-out;
     transform-origin: center center;
     color: var(--color-light-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.arrow.rotated {
+/* Переворот стрелочки при открытом поп-апе (из .arrow.rotated) */
+.arrowOpen {
     transform: rotate(180deg);
+}
+
+.sortLabel {
+    font-weight: 400;
+    font-size: 18px;
 }
