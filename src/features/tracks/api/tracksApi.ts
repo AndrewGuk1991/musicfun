@@ -1,4 +1,4 @@
-import type { FetchTracksResponse } from "@/features/tracks/api/tracksApi.types.ts";
+import type {FetchTracksArgs, FetchTracksResponse} from "@/features/tracks/api/tracksApi.types.ts";
 import { baseApi } from "@/app/api/baseApi.ts";
 import { withZodCatch } from "@/common/utils";
 import { fetchTracksResponseSchema } from "@/features/tracks/model/tracks.schemas.ts";
@@ -9,7 +9,7 @@ export const tracksApi = baseApi.injectEndpoints({
     endpoints: build => ({
         fetchTracks: build.infiniteQuery<
             FetchTracksResponse,
-            { search?: string; sortBy?: string; sortDirection?: string }, // 1. Добавили параметры в тип аргументов
+            FetchTracksArgs,
             string | null
         >({
             infiniteQueryOptions: {
