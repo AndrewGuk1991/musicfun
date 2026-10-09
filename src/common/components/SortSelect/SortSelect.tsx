@@ -1,59 +1,35 @@
 import { useState } from "react";
 import { Icon } from "@/common/components";
-import { SortDropdown } from "@/common/components/SortSelect/SortDropdown/SortDropdown.tsx";
-import type { SortOption } from "@/common/components/SortSelect/SortDropdown/SortDropdown.tsx";
-import type { SortDirection } from "@/common/types/sort.ts";
-import { useClickOutside } from "@/common/hooks"; // Твой родной хук
+import { SortDropdown } from "./SortDropdown/SortDropdown";
+import type { SortOption } from "./SortDropdown/SortDropdown";
+import type { AppSortField, SortDirection } from "@/common/types/sort.ts";
+import { useClickOutside } from "@/common/hooks";
 import { getSortLabel } from "./lib/getSortLabel";
 
 import s from "./SortSelect.module.css";
 
-type SortSelectProps<T extends string> = {
-    sortBy: T;
+type SortSelectProps = {
+    sortBy: AppSortField;
     sortDirection: SortDirection;
-    options: SortOption<T>[];
-    onSortChange: (sortBy: T, direction: SortDirection) => void;
+    options: SortOption<AppSortField>[];
+    onSortChange: (sortBy: AppSortField, direction: SortDirection) => void;
     isLoading?: boolean;
 };
 
-export const SortSelect = <T extends string,>({
-                                                  sortBy,
-                                                  sortDirection,
-                                                  options,
-                                                  onSortChange,
-                                              }: SortSelectProps<T>) => {
+export const SortSelect = ({ sortBy, sortDirection, options, onSortChange }: SortSelectProps) => {
     const [isOpen, setIsOpen] = useState(false);
-
     const dropdownRef = useClickOutside(() => setIsOpen(false));
 
     return (
-        /* Привязываем созданный хуком ref к контейнеру */
         <div className={s.sortWrapper} ref={dropdownRef}>
             <span className={s.sortLabel}>Sort by</span>
-            <button
-                className={s.sortBtn}
-                onClick={() => setIsOpen(!isOpen)}
-                type="button"
-            >
+            <button className={s.sortBtn} onClick={() => setIsOpen(!isOpen)} type="button">
                 <span>{getSortLabel(sortBy, sortDirection)}</span>
-
-                <Icon
-                    id="icon-arrow-down"
-                    width={14}
-                    height={7}
-                    viewBox="0 0 14 7"
-                    className={`${s.arrow} ${isOpen ? s.arrowOpen : ''}`}
-                />
+                <Icon id="icon-arrow-down" width={14} height={7} viewBox="0 0 14 7" className={`${s.chevron} ${isOpen ? s.chevronOpen : ''}`} />
             </button>
 
             {isOpen && (
-                <SortDropdown
-                    sortBy={sortBy}
-                    sortDirection={sortDirection}
-                    options={options}
-                    onSortChange={onSortChange}
-                    onClose={() => setIsOpen(false)}
-                />
+                <SortDropdown sortBy={sortBy} sortDirection={sortDirection} options={options} onSortChange={onSortChange} onClose={() => setIsOpen(false)} />
             )}
         </div>
     );
