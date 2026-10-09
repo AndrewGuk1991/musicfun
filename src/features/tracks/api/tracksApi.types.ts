@@ -23,7 +23,7 @@ export type FetchTracksArgs = {
     pageNumber?: number
     pageSize?: number
     search?: string
-    sortBy?: 'publishedAt' | 'likesCount'
+    sortBy?: 'addedAt' | 'likesCount'
     sortDirection?: 'asc' | 'desc'
     tagsIds?: string[]
     artistsIds?: string[]
@@ -33,3 +33,8 @@ export type FetchTracksArgs = {
     paginationType?: 'offset' | 'cursor'
     cursor?: string
 }
+
+// Расширенный тип аргументов для внутреннего кэша RTK Query
+export type FetchTracksArgsInternal = FetchTracksArgs & {
+    pageParam?: string | null;
+};
