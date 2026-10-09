@@ -1,38 +1,47 @@
-import type {FetchTracksResponse} from "@/features/tracks/api/tracksApi.types.ts";
-import {baseApi} from "@/app/api/baseApi.ts";
-import {withZodCatch} from "@/common/utils";
-import {fetchTracksResponseSchema} from "@/features/tracks/model/tracks.schemas.ts";
-import type {ReactionUserResponse} from "@/common/types";
-import {reactionUserResponseSchema} from "@/common/schemas";
+import type { FetchTracksResponse } from "@/features/tracks/api/tracksApi.types.ts";
+import { baseApi } from "@/app/api/baseApi.ts";
+import { withZodCatch } from "@/common/utils";
+import { fetchTracksResponseSchema } from "@/features/tracks/model/tracks.schemas.ts";
+import type { ReactionUserResponse } from "@/common/types";
+import { reactionUserResponseSchema } from "@/common/schemas";
 
 export const tracksApi = baseApi.injectEndpoints({
     endpoints: build => ({
-        fetchTracks: build.infiniteQuery<FetchTracksResponse, { search?: string }, string | null>({
+        fetchTracks: build.infiniteQuery<
+            FetchTracksResponse,
+            { search?: string; sortBy?: string; sortDirection?: string }, // 1. Добавили параметры в тип аргументов
+            string | null
+        >({
             infiniteQueryOptions: {
                 initialPageParam: null,
-                getNextPageParam: (lastPage) => (
-                    lastPage.meta.nextCursor || null
-                )
+                getNextPageParam: (lastPage) => lastPage.meta.nextCursor || null
             },
-            query: ({pageParam, queryArg}) => ({
+            query: ({ pageParam, queryArg }) => ({
                 url: 'playlists/tracks',
                 params: {
                     cursor: pageParam,
                     paginationType: 'cursor',
                     pageSize: 5,
-                    ...(queryArg?.search ? { search: queryArg.search } : {})
+                    search: queryArg?.search || undefined,
+                    sortBy: queryArg?.sortBy || 'addedAt',
+                    sortDirection: queryArg?.sortDirection || 'desc',
                 }
             }),
-            //  ИСПРАВЛЕНО: Безопасно собираем ID треков со всех загруженных страниц пагинации
-            providesTags: (result, _error, arg) =>
-                result
+            // 3. Передаем параметры в providesTags, чтобы при изменении sortBy/sortDirection
+            // RTK Query автоматически уничтожал старый массив страниц и загружал новую 1-ю страницу
+            providesTags: (result, _error, arg) => {
+                const searchKey = arg.search || 'ALL';
+                const sortKey = `${arg.sortBy || 'publishedAt'}_${arg.sortDirection || 'desc'}`;
+
+                return result
                     ? [
                         ...result.pages.flatMap((page) =>
                             page.data.map(({ id }) => ({ type: 'Track' as const, id }))
                         ),
-                        { type: 'Track', id: `LIST_${arg.search || 'ALL'}` },
+                        { type: 'Track', id: `LIST_${searchKey}_${sortKey}` },
                     ]
-                    : [{ type: 'Track', id: 'LIST' }],
+                    : [{ type: 'Track', id: 'LIST' }];
+            },
             ...withZodCatch(fetchTracksResponseSchema)
         }),
         fetchLastTracks: build.query<FetchTracksResponse, { pageSize: number }>({
@@ -82,4 +91,4 @@ export const {
     useLikeTrackMutation,
     useDislikeTrackMutation,
     useRemoveReactionTrackMutation
-} = tracksApi
+} = tracksApi;
