@@ -1,10 +1,10 @@
 import { memo } from 'react';
-import type { PlaylistData } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
+import defaultCover from '@/assets/images/default-playlist-cover.png'
+import s from './PlaylistCard.module.css'
+import type {PlaylistData} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import {
     PlaylistDescription
-} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistDescription/PlaylistDescription.tsx";
-import defaultCover from '@/assets/images/default-playlist-cover.png'
-import s from './PlaylistItem.module.css'
+} from "@/features/playlists/ui/PlaylistsPage/PlaylistCard/PlaylistDescription/PlaylistDescription.tsx";
 
 type Props = {
     playlist: PlaylistData
@@ -12,7 +12,7 @@ type Props = {
     editPlaylistHandler?: (playlist: PlaylistData) => void
 }
 
-export const PlaylistItem = memo(({ playlist }: Props) => {
+export const PlaylistCard = memo(({ playlist }: Props) => {
     const originalCover = playlist.attributes.images.main?.find(img => img.type === 'original')
     const src = originalCover?.url || defaultCover
 
