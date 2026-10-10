@@ -15,7 +15,6 @@ import {imagesSchema, reactionUserResponseSchema} from "@/common/schemas";
 import {SOCKET_EVENTS} from "@/common/constants";
 import {subscribeToEvent} from "@/common/socket";
 
-
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         fetchPlaylists: build.query({
@@ -23,35 +22,45 @@ export const playlistsApi = baseApi.injectEndpoints({
             ...withZodCatch(playlistsResponseSchema),
             keepUnusedDataFor: 0,
             onCacheEntryAdded: async (_arg, {cacheDataLoaded, updateCachedData, cacheEntryRemoved}) => {
-
-                await cacheDataLoaded
+                await cacheDataLoaded;
 
                 const unsubscribes = [
                     subscribeToEvent<PlaylistCreatedEvent>(SOCKET_EVENTS.PLAYLIST_CREATED, (msg) => {
-                        const newPlaylist = msg.payload.data
+                        const newPlaylist = msg.payload.data;
                         updateCachedData((state) => {
-                            state.data.pop()
-                            state.data.unshift(newPlaylist)
-                            state.meta.totalCount = state.meta.totalCount + 1
-                            state.meta.pagesCount = Math.ceil(state.meta.totalCount / state.meta.pageSize)
-                        })
+                            state.data.pop();
+                            state.data.unshift(newPlaylist);
+                            state.meta.totalCount = state.meta.totalCount + 1;
+                            state.meta.pagesCount = Math.ceil(state.meta.totalCount / state.meta.pageSize);
+                        });
                     }),
                     subscribeToEvent<PlaylistUpdateEvent>(SOCKET_EVENTS.PLAYLIST_UPDATED, (msg) => {
-                        const newPlaylist = msg.payload.data
+                        const newPlaylist = msg.payload.data;
                         updateCachedData((state) => {
-                            const index = state.data.findIndex(playlist => playlist.id === newPlaylist.id)
+                            const index = state.data.findIndex(playlist => playlist.id === newPlaylist.id);
                             if (index !== -1) {
-                                state.data[index] = {...state.data[index], ...newPlaylist}
+                                state.data[index] = {...state.data[index], ...newPlaylist};
                             }
-                        })
+                        });
                     })
-                ]
+                ];
 
-                await cacheEntryRemoved
-
-                unsubscribes.forEach(unsubscribe => unsubscribe())
+                await cacheEntryRemoved;
+                unsubscribes.forEach(unsubscribe => unsubscribe());
             },
-            providesTags: ['Playlist'],
+            // Разделяем теги кэша на основе параметров поиска и сортировки,
+            // чтобы RTK Query гарантированно перезапрашивал данные с сервера при смене SortBy
+            providesTags: (result, _error, arg) => {
+                const searchKey = arg.search || 'ALL';
+                const sortKey = `${arg.sortBy || 'addedAt'}_${arg.sortDirection || 'desc'}`;
+
+                return result
+                    ? [
+                        ...result.data.map(({ id }) => ({ type: 'Playlist' as const, id })),
+                        { type: 'Playlist', id: `LIST_${searchKey}_${sortKey}` },
+                    ]
+                    : [{ type: 'Playlist', id: 'LIST' }];
+            },
         }),
         createPlaylist: build.mutation({
             query: (body: CreatePlaylistArgs) => ({
@@ -76,10 +85,8 @@ export const playlistsApi = baseApi.injectEndpoints({
                 body
             }),
             onQueryStarted: async ({playlistId, body}, {queryFulfilled, dispatch, getState}) => {
-
-                const args = playlistsApi.util.selectCachedArgsForQuery(getState(), 'fetchPlaylists')
-
-                const patchCollections: any[] = []
+                const args = playlistsApi.util.selectCachedArgsForQuery(getState(), 'fetchPlaylists');
+                const patchCollections: any[] = [];
 
                 args.forEach(arg => {
                     patchCollections.push(dispatch(
@@ -88,39 +95,41 @@ export const playlistsApi = baseApi.injectEndpoints({
                             {
                                 pageNumber: arg.pageNumber,
                                 pageSize: arg.pageSize,
-                                search: arg.search
+                                search: arg.search,
+                                // ИСПРАВЛЕНО: Передаем параметры сортировки в кэш-ключ,
+                                // иначе ручное обновление стейта ломало кэш отсортированных страниц!
+                                sortBy: arg.sortBy,
+                                sortDirection: arg.sortDirection
                             },
                             (state) => {
-                                const index = state.data.findIndex(playlist => playlist.id === playlistId)
+                                const index = state.data.findIndex(playlist => playlist.id === playlistId);
                                 if (index !== -1) {
-                                    state.data[index].attributes = {...state.data[index].attributes, ...body.data.attributes}
+                                    state.data[index].attributes = {...state.data[index].attributes, ...body.data.attributes};
                                 }
                             }
                         )
-                    ))
-                })
+                    ));
+                });
 
                 try {
-                    await queryFulfilled
+                    await queryFulfilled;
                 } catch (e) {
                     patchCollections.forEach(patchCollection => {
-                        patchCollection.undo()
-                    })
+                        patchCollection.undo();
+                    });
                 }
             },
             invalidatesTags: ['Playlist']
         }),
         uploadPlaylistCover: build.mutation<Images, { playlistId: string, file: File }>({
             query: ({playlistId, file}) => {
-                const formData = new FormData()
-
-                formData.append('file', file)
-
+                const formData = new FormData();
+                formData.append('file', file);
                 return {
                     url: `playlists/${playlistId}/images/main`,
                     method: 'post',
                     body: formData
-                }
+                };
             },
             ...withZodCatch(imagesSchema),
             invalidatesTags: ['Playlist']
@@ -154,7 +163,7 @@ export const playlistsApi = baseApi.injectEndpoints({
             invalidatesTags: ['Playlist']
         })
     })
-})
+});
 
 export const {
     useFetchPlaylistsQuery,
@@ -166,6 +175,4 @@ export const {
     useLikePlaylistMutation,
     useDislikePlaylistMutation,
     useRemoveReactionPlaylistMutation,
-} = playlistsApi
-
-
+} = playlistsApi;
