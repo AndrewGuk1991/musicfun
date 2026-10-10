@@ -1,9 +1,9 @@
 import {useGetMeQuery} from "@/features/auth/api/authApi.ts";
 import {useFetchPlaylistsQuery} from "@/features/playlists/api/playlists/playlistsApi.ts";
-import {CreatePlaylistForm, PlaylistsList} from "@/features/playlists/ui";
 import s from './ProfilePage.module.css'
 import {Navigate} from "react-router";
 import {Path} from "@/common/routing";
+import {CreatePlaylistForm, PlaylistsList} from "@/features/playlists/ui/PlaylistsPage";
 
 export const ProfilePage = () => {
 
@@ -24,7 +24,7 @@ export const ProfilePage = () => {
             <h1>{meResponse?.login} page</h1>
             <div className={s.container}>
                 <CreatePlaylistForm/>
-                <PlaylistsList isPlaylistLoading={isLoading || isMeLoading} playlists={playlistsResponse?.data || []}/>
+                <PlaylistsList isLoading={isLoading || isMeLoading} playlists={playlistsResponse?.data || []}/>
             </div>
         </div>
     )

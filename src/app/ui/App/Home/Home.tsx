@@ -1,8 +1,8 @@
 import { useFetchPlaylistsQuery } from "@/features/playlists/api/playlists/playlistsApi.ts";
-import { PlaylistsList } from "@/features/playlists/ui";
 import { useFetchLastTracksQuery } from "@/features/tracks/api/tracksApi.ts";
 import { TracksList } from "@/features/tracks/ui/TracksList/TracksList.tsx";
 import s from './Home.module.css';
+import {PlaylistsList} from "@/features/playlists/ui/PlaylistsPage";
 
 export const Home = () => {
     const { data: playlistsData, isLoading: isPlaylistsLoading } = useFetchPlaylistsQuery({ pageSize: 5 });

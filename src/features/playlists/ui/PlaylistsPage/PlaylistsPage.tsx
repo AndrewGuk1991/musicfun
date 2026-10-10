@@ -1,12 +1,12 @@
 import s from './PlaylistsPage.module.css'
 import {useFetchPlaylistsQuery} from "@/features/playlists/api/playlists/playlistsApi.ts";
-import {PlaylistsList} from "@/features/playlists/ui";
 import {type ChangeEvent, useState} from "react";
 import {useDebounceValue} from "@/common/hooks";
 import {Pagination} from "@/common/components/Pagination/Pagination.tsx";
 import {SearchElement, SortSelect} from "@/common/components";
 import {COMMON_SORT_OPTIONS} from "@/common/components/SortSelect/config/sortOptions.ts";
 import type {AppSortField, SortDirection} from "@/common/types/sort.ts";
+import {PlaylistsList} from "@/features/playlists/ui/PlaylistsPage/PlaylistsList/PlaylistsList.tsx";
 
 
 export const PlaylistsPage = () => {
