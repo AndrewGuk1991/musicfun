@@ -2,13 +2,35 @@
 .container {
     display: flex;
     flex-direction: column;
-    padding: 32px;
+    padding: 32px 32px 100px 32px;
     background: linear-gradient(180deg, #3333a3 5.09%, #121212 33.4%);
-    height: 100%;
+    min-height: 100vh;
 }
 
 .title {
     font-weight: 600;
     font-size: 24px;
+    margin-bottom: 24px;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.emptyStateTitle {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-gray-300);
+    margin-bottom: 8px;
+}
+
+.controlsPanel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Расталкивает инпут поиска влево, а сортировку — вправо */
+    width: 100%;
+    gap: 24px;
     margin-bottom: 24px;
 }
