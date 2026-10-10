@@ -1,9 +1,9 @@
 import s from './PlaylistsList.module.css'
-import {PlaylistItem} from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistItem.tsx";
 import {useMemo} from "react";
 import type {PlaylistData} from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 
 import {PlaylistsGridSkeleton} from "@/common/components/Skeletons/PlaylistsGridSkeleton/PlaylistsGridSkeleton.tsx";
+import {PlaylistCard} from "../PlaylistCard/PlaylistCard.tsx";
 
 type Props = {
     playlists: PlaylistData[]
@@ -43,7 +43,7 @@ export const PlaylistsList = ({ playlists, isLoading, countSkeleton }: Props) =>
 
 
     // 2. Состояние "Не найдено"
-    if (!uniquePlaylists.length) return <h2 className={s.title}>Playlists not found</h2>
+    if (!uniquePlaylists.length) return <h2 >Playlists not found</h2>
 
 
     // 3. Успешный рендер данных
@@ -51,7 +51,7 @@ export const PlaylistsList = ({ playlists, isLoading, countSkeleton }: Props) =>
         <div>
             <div className={s.items}>
                 {uniquePlaylists.map((playlist) => (
-                        <PlaylistItem
+                        <PlaylistCard
                             key={playlist.id}
                             playlist={playlist}
                         />
