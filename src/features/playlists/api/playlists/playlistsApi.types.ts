@@ -5,6 +5,7 @@ import {
     playlistDataSchema,
     type playlistMetaSchema, playlistsResponseSchema
 } from "@/features/playlists/model/playlists.schemas.ts";
+import type {AppSortField, SortDirection} from "@/common/types/sort.ts";
 
 export type PlaylistsResponse = z.infer<typeof playlistsResponseSchema>
 
@@ -23,8 +24,8 @@ export type FetchPlaylistsArgs = {
     pageNumber?: number
     pageSize?: number
     search?: string
-    sortBy?: 'addedAt' | 'likesCount'
-    sortDirection?: 'asc' | 'desc'
+    sortBy?: AppSortField
+    sortDirection?: SortDirection
     tagsIds?: string[]
     userId?: string
     trackId?: string
