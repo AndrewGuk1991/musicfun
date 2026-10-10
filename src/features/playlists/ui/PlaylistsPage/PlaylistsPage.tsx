@@ -4,30 +4,37 @@ import {PlaylistsList} from "@/features/playlists/ui";
 import {type ChangeEvent, useState} from "react";
 import {useDebounceValue} from "@/common/hooks";
 import {Pagination} from "@/common/components/Pagination/Pagination.tsx";
-import {PlaylistsSearch} from "@/features/playlists/ui/PlaylistsPage/PlaylistsSearch/PlaylistsSearch.tsx";
-import {PlaylistsSort} from "@/features/playlists/ui/PlaylistsPage/PlaylistsSort/PlaylistsSort.tsx";
+import {SearchElement, SortSelect} from "@/common/components";
+import {COMMON_SORT_OPTIONS} from "@/common/components/SortSelect/config/sortOptions.ts";
+import type {AppSortField, SortDirection} from "@/common/types/sort.ts";
+
 
 export const PlaylistsPage = () => {
-    const [sortDirection, setSortDirection] = useState<'desc' | 'asc'>('desc');
     const [search, setSearch] = useState('')
-
-    const toggleSort = () => {
-        setSortDirection(prev => prev === 'desc' ? 'asc' : 'desc');
-        setCurrentPage(1);
-    };
-
     const debounceSearch = useDebounceValue(search)
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
+
+    const [sortBy, setSortBy] = useState<AppSortField>("addedAt");
+    const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
     const {data, isLoading} = useFetchPlaylistsQuery({
         search: debounceSearch,
         pageNumber: currentPage,
         pageSize,
-        sortBy: 'addedAt',
+        sortBy,
         sortDirection,
-
     })
+
+    const playlists = data?.data || [];
+
+    // Обработчик изменения типа или направления сортировки
+    const handleSortChange = (newSortBy: AppSortField, newDirection: SortDirection) => {
+        setSortBy(newSortBy);
+        setSortDirection(newDirection);
+        setCurrentPage(1); // Принудительно сбрасываем пагинацию на первую страницу
+    };
+
 
     const changePageSizeHandler = (size: number) => {
         setPageSize(size)
@@ -48,22 +55,24 @@ export const PlaylistsPage = () => {
                     <h1 className={s.title}>All Playlists</h1>
 
                     <div className={s.searchWrapper}>
-                        <PlaylistsSearch
+                        <SearchElement
                             value={search}
                             onChange={searchPlaylistHandler}
                             isLoading={isLoading}
+                            placeholder={'Search playlist'}
                         />
-                        <PlaylistsSort
+                        <SortSelect
+                            sortBy={sortBy}
                             sortDirection={sortDirection}
-                            onToggleSort={toggleSort}
-                            isLoading={isLoading}
+                            options={COMMON_SORT_OPTIONS}
+                            onSortChange={handleSortChange}
                         />
                     </div>
                 </>
             )}
 
             <PlaylistsList
-                playlists={data?.data || []}
+                playlists={playlists}
                 isLoading={isLoading}
                 countSkeleton={pageSize}
             />
