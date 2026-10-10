@@ -27,6 +27,7 @@ export type FetchTracksArgs = {
     sortDirection?: 'asc' | 'desc'
     tagsIds?: string[]
     artistsIds?: string[]
+    playlistsIds?: string[]
     userId?: string
     includeDrafts?: boolean
     onlyLikedByMe?: boolean

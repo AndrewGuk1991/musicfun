@@ -25,6 +25,7 @@ export const tracksApi = baseApi.injectEndpoints({
                     search: queryArg?.search || undefined,
                     sortBy: queryArg?.sortBy || 'addedAt',
                     sortDirection: queryArg?.sortDirection || 'desc',
+                    playlistsIds: queryArg?.playlistsIds || undefined,
                 }
             }),
             // 3. Передаем параметры в providesTags, чтобы при изменении sortBy/sortDirection
@@ -33,12 +34,14 @@ export const tracksApi = baseApi.injectEndpoints({
                 const searchKey = arg.search || 'ALL';
                 const sortKey = `${arg.sortBy || 'publishedAt'}_${arg.sortDirection || 'desc'}`;
 
+                const playlistKey = arg.playlistsIds ? arg.playlistsIds.join('_') : 'GLOBAL';
+
                 return result
                     ? [
                         ...result.pages.flatMap((page) =>
                             page.data.map(({ id }) => ({ type: 'Track' as const, id }))
                         ),
-                        { type: 'Track', id: `LIST_${searchKey}_${sortKey}` },
+                        { type: 'Track', id: `LIST_${playlistKey}_${searchKey}_${sortKey}` },
                     ]
                     : [{ type: 'Track', id: 'LIST' }];
             },
