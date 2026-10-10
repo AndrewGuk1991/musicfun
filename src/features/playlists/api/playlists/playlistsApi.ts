@@ -1,7 +1,7 @@
 import type {
     CreatePlaylistArgs,
     FetchPlaylistsArgs,
-    PlaylistCreatedEvent, PlaylistUpdateEvent,
+    PlaylistCreatedEvent, PlaylistData, PlaylistUpdateEvent,
     UpdatePlaylistArgs
 } from "@/features/playlists/api/playlists/playlistsApi.types.ts";
 import type {Images, ReactionUserResponse} from "@/common/types";
@@ -61,6 +61,12 @@ export const playlistsApi = baseApi.injectEndpoints({
                     ]
                     : [{ type: 'Playlist', id: 'LIST' }];
             },
+        }),
+        fetchPlaylistById: build.query<{ data: PlaylistData }, string>({
+            query: (playlistId) => ({ url: `playlists/${playlistId}` }),
+            ...withZodCatch(playlistCreateResponseSchema), // Парсим Zod-схемой для одиночного объекта плейлиста
+            // Привязываем индивидуальный тег. Любые лайки или апдейты обложки этого ID автоматически обновят страницу!
+            providesTags: (_result, _error, playlistId) => [{ type: 'Playlist', id: playlistId }],
         }),
         createPlaylist: build.mutation({
             query: (body: CreatePlaylistArgs) => ({
@@ -175,4 +181,5 @@ export const {
     useLikePlaylistMutation,
     useDislikePlaylistMutation,
     useRemoveReactionPlaylistMutation,
+    useFetchPlaylistByIdQuery
 } = playlistsApi;
