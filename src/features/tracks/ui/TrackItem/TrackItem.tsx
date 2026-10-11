@@ -50,7 +50,7 @@ export const TrackItem = ({track, included = []}: Props) => {
             <p className={s.artist}>{artistName}</p>
             <ReactionActions
                 currentReaction={currentReaction}
-                likesCount={track.attributes.likesCount}
+                likesCount={track.attributes.likesCount || 0}
                 isLoading={isAnyActionLoading}
                 onLikeClick={handleLikeClick}
                 onDislikeClick={handleDislikeClick}/>

@@ -118,7 +118,7 @@ export const TrackRow = React.memo(({ track, index, included = [], onPlay }: Tra
             <div className={s.actions} onClick={(e) => e.stopPropagation()}>
                 <ReactionActions
                     currentReaction={currentReaction}
-                    likesCount={likesCount}
+                    likesCount={likesCount || 0}
                     isLoading={isAnyActionLoading}
                     onLikeClick={handleLikeClick}
                     onDislikeClick={handleDislikeClick}
