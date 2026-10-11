@@ -54,7 +54,17 @@ export const tracksApi = baseApi.injectEndpoints({
                     search: search || undefined,
                 }
             }),
-            providesTags: (_result, _error, { playlistId }) => [{ type: 'Track' as const, id: `PLAYLIST_${playlistId}` }],
+
+            providesTags: (result, _error, { playlistId }) => {
+                return result
+                    ? [
+
+                        ...result.data.map(({ id }) => ({ type: 'Track' as const, id })),
+
+                        { type: 'Track', id: `PLAYLIST_${playlistId}` },
+                    ]
+                    : [{ type: 'Track', id: 'LIST' }];
+            },
 
             ...withZodCatch(fetchPlaylistTracksResponseSchema)
         }),
