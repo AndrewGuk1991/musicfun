@@ -17,6 +17,7 @@ import {subscribeToEvent} from "@/common/socket";
 
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
+        // 1. Получение общего списка плейлистов с синхронизацией кэша
         fetchPlaylists: build.query({
             query: (params: FetchPlaylistsArgs) => ({url: `playlists`, params}),
             ...withZodCatch(playlistsResponseSchema),
@@ -48,8 +49,6 @@ export const playlistsApi = baseApi.injectEndpoints({
                 await cacheEntryRemoved;
                 unsubscribes.forEach(unsubscribe => unsubscribe());
             },
-            // Разделяем теги кэша на основе параметров поиска и сортировки,
-            // чтобы RTK Query гарантированно перезапрашивал данные с сервера при смене SortBy
             providesTags: (result, _error, arg) => {
                 const searchKey = arg.search || 'ALL';
                 const sortKey = `${arg.sortBy || 'addedAt'}_${arg.sortDirection || 'desc'}`;
@@ -62,12 +61,15 @@ export const playlistsApi = baseApi.injectEndpoints({
                     : [{ type: 'Playlist', id: 'LIST' }];
             },
         }),
+
+        // 2. Получение метаданных ОДНОГО конкретного плейлиста для шапки PlaylistPage
         fetchPlaylistById: build.query<{ data: PlaylistData }, string>({
             query: (playlistId) => ({ url: `playlists/${playlistId}` }),
-            ...withZodCatch(playlistCreateResponseSchema), // Парсим Zod-схемой для одиночного объекта плейлиста
-            // Привязываем индивидуальный тег. Любые лайки или апдейты обложки этого ID автоматически обновят страницу!
+            ...withZodCatch(playlistCreateResponseSchema),
             providesTags: (_result, _error, playlistId) => [{ type: 'Playlist', id: playlistId }],
         }),
+
+        // 3. Создание нового плейлиста
         createPlaylist: build.mutation({
             query: (body: CreatePlaylistArgs) => ({
                 url: 'playlists',
@@ -77,6 +79,8 @@ export const playlistsApi = baseApi.injectEndpoints({
             ...withZodCatch(playlistCreateResponseSchema),
             invalidatesTags: ['Playlist']
         }),
+
+        // 4. Удаление плейлиста
         deletePlaylist: build.mutation<void, string>({
             query: (playlistId) => ({
                 url: `playlists/${playlistId}`,
@@ -84,6 +88,8 @@ export const playlistsApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Playlist']
         }),
+
+        // 5. Обновление текстовых данных плейлиста с оптимистичным патчем кэша
         updatePlaylist: build.mutation<void, { playlistId: string, body: UpdatePlaylistArgs }>({
             query: ({playlistId, body}) => ({
                 url: `playlists/${playlistId}`,
@@ -102,8 +108,6 @@ export const playlistsApi = baseApi.injectEndpoints({
                                 pageNumber: arg.pageNumber,
                                 pageSize: arg.pageSize,
                                 search: arg.search,
-                                // ИСПРАВЛЕНО: Передаем параметры сортировки в кэш-ключ,
-                                // иначе ручное обновление стейта ломало кэш отсортированных страниц!
                                 sortBy: arg.sortBy,
                                 sortDirection: arg.sortDirection
                             },
@@ -127,6 +131,8 @@ export const playlistsApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ['Playlist']
         }),
+
+        // 6. Загрузка файла обложки плейлиста
         uploadPlaylistCover: build.mutation<Images, { playlistId: string, file: File }>({
             query: ({playlistId, file}) => {
                 const formData = new FormData();
@@ -140,10 +146,14 @@ export const playlistsApi = baseApi.injectEndpoints({
             ...withZodCatch(imagesSchema),
             invalidatesTags: ['Playlist']
         }),
+
+        // 7. Удаление обложки плейлиста
         deletePlaylistCover: build.mutation<void, { playlistId: string }>({
             query: ({playlistId}) => ({url: `playlists/${playlistId}/images/main`, method: 'delete'}),
             invalidatesTags: ['Playlist']
         }),
+
+        // 8. Лайк плейлиста
         likePlaylist: build.mutation<ReactionUserResponse, string>({
             query: (playlistId) => ({
                 url: `playlists/${playlistId}/likes`,
@@ -152,6 +162,8 @@ export const playlistsApi = baseApi.injectEndpoints({
             ...withZodCatch(reactionUserResponseSchema),
             invalidatesTags: ['Playlist']
         }),
+
+        // 9. Дизлайк плейлиста
         dislikePlaylist: build.mutation<ReactionUserResponse, string>({
             query: (playlistId) => ({
                 url: `playlists/${playlistId}/dislikes`,
@@ -160,6 +172,8 @@ export const playlistsApi = baseApi.injectEndpoints({
             ...withZodCatch(reactionUserResponseSchema),
             invalidatesTags: ['Playlist']
         }),
+
+        // 10. Удаление любой реакции (лайка/дизлайка) с плейлиста
         removeReactionPlaylist: build.mutation<ReactionUserResponse, string>({
             query: (playlistId) => ({
                 url: `playlists/${playlistId}/reactions`,
@@ -173,6 +187,7 @@ export const playlistsApi = baseApi.injectEndpoints({
 
 export const {
     useFetchPlaylistsQuery,
+    useFetchPlaylistByIdQuery,
     useCreatePlaylistMutation,
     useDeletePlaylistMutation,
     useUpdatePlaylistMutation,
@@ -181,5 +196,4 @@ export const {
     useLikePlaylistMutation,
     useDislikePlaylistMutation,
     useRemoveReactionPlaylistMutation,
-    useFetchPlaylistByIdQuery
 } = playlistsApi;
