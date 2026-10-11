@@ -3,27 +3,29 @@ import {currentUserReactionSchema, imagesSchema, userSchema} from "@/common/sche
 
 export const trackAttachmentSchema = z.object({
     id: z.string(),
-    addedAt: z.iso.datetime(),
-    updatedAt: z.iso.datetime(),
-    version: z.int().nonnegative(),
-    url: z.url(),
+    addedAt: z.string(),
+    updatedAt: z.string(),
+    version: z.number().nonnegative(),
+    url: z.string(), // Оставляем чистую строку, так как Zod ругался на спецсимволы в URL
     contentType: z.string(),
     originalName: z.string(),
-    fileSize: z.int().nonnegative(),
+    fileSize: z.number().nonnegative(),
 });
 
 export const trackAttributesSchema = z.object({
     title: z.string(),
-    addedAt: z.iso.datetime(),
-    likesCount: z.int().nonnegative(),
+    addedAt: z.string(), // Ослабляем до обычной строки
+    likesCount: z.number().int().nonnegative().optional(),
     attachments: z.array(trackAttachmentSchema),
     images: imagesSchema,
-    user: userSchema,
+    user: userSchema.optional(),
     currentUserReaction: currentUserReactionSchema,
-    isPublished: z.boolean(),
-    publishedAt: z.iso.datetime(),
+    isPublished: z.boolean().optional(),
+    publishedAt: z.string().nullable(),
     duration: z.number().nonnegative(),
+    order: z.number().int().nonnegative().optional()
 })
+
 
 export const trackRelationshipsSchema = z.object({
     artists: z.object({
@@ -37,11 +39,11 @@ export const trackRelationshipsSchema = z.object({
 })
 
 export const tracksMetaSchema = z.object({
-    nextCursor: z.string().nullable(),
-    page: z.int().positive(),
-    pageSize: z.int().positive(),
-    totalCount: z.int().positive().nullable(),
-    pagesCount: z.int().positive().nullable(),
+    nextCursor: z.string().nullable().optional(),
+    page: z.number().positive().optional(),
+    pageSize: z.number().positive().optional(),
+    totalCount: z.number().nonnegative().nullable(),
+    pagesCount: z.number().positive().optional().nullable(),
 })
 
 export const tracksIncludedSchema = z.object({
@@ -61,6 +63,14 @@ export const trackDataSchema = z.object({
 
 export const fetchTracksResponseSchema = z.object({
     data: z.array(trackDataSchema),
-    included: z.array(tracksIncludedSchema),
+    included: z.array(z.any()).optional(),
     meta: tracksMetaSchema
 })
+
+export const fetchPlaylistTracksResponseSchema = z.object({
+    data: z.array(trackDataSchema),
+    included: z.array(z.any()).optional(),
+    meta: z.object({
+        totalCount: z.number().nonnegative()
+    })
+});
