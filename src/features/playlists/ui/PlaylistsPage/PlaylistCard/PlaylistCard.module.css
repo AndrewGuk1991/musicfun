@@ -1,4 +1,11 @@
-.item {
+.cardLink {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    width: 100%;
+}
+
+.playlistCard {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -13,6 +20,8 @@
     max-width: 100%;
     height: 153px;
     object-fit: cover;
+    display: block;
+    flex-shrink: 0;
 }
 
 /*.actionButton {*/
