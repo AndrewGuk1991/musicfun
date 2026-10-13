@@ -1,9 +1,16 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { MouseEvent, ChangeEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '@/app/model/store.ts';
 import { clearSeek, nextTrack, pauseTrack, playTrack, prevTrack, updateProgress } from "@/app/model/playerSlice.ts";
+
+let globalAudioInstance: HTMLAudioElement | null = null;
+
+if (typeof window !== 'undefined' && !globalAudioInstance) {
+    globalAudioInstance = new Audio();
+    globalAudioInstance.volume = 0.5; // Начальная дефолтная громкость
+}
 
 export const useAudioPlayer = () => {
     const dispatch = useDispatch();
@@ -19,24 +26,13 @@ export const useAudioPlayer = () => {
         seekTo
     } = useSelector((state: RootState) => state.player);
 
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [volume, setVolume] = useState(0.5); // Громкость по умолчанию: 50%
+    const [volume, setVolume] = useState(globalAudioInstance ? globalAudioInstance.volume : 0.5);
 
-    // 1. Инициализируем HTMLAudioElement строго один раз при монтировании хука
+    // 1. УПРАВЛЕНИЕ ИСТОЧНИКОМ И ВОСПРОИЗВЕДЕНИЕМ (Остается синглтоном)
     useEffect(() => {
-        if (typeof window !== 'undefined' && !audioRef.current) {
-            audioRef.current = new Audio();
-            // Устанавливаем дефолтную громкость в нативный плеер сразу при создании
-            audioRef.current.volume = volume;
-        }
-    }, []);
-
-    // 2. БЕЗОПАСНАЯ СИНХРОНИЗАЦИЯ: Управление источником звука, воспроизведением и асинхронными Promise
-    useEffect(() => {
-        const audio = audioRef.current;
+        const audio = globalAudioInstance;
         if (!audio || !trackUrl) return;
 
-        // Флаг для отслеживания актуальности текущего цикла эффекта
         let isEffectActive = true;
 
         if (audio.src !== trackUrl) {
@@ -50,16 +46,13 @@ export const useAudioPlayer = () => {
             if (playPromise !== undefined) {
                 playPromise
                     .then(() => {
-                        // Если пока трек буферизировался, пользователь уже нажал на паузу — останавливаем
                         if (!isEffectActive) {
                             audio.pause();
                         }
                     })
                     .catch((err) => {
-                        // Полностью игнорируем системные ошибки прерывания браузера (AbortError),
-                        // они естественны при быстрой смене треков или двойном клике.
                         if (err.name !== 'AbortError') {
-                            console.error("Реальная ошибка воспроизведения аудиофайла:", err);
+                            console.error("Реальная ошибка воспроизведения:", err);
                             dispatch(pauseTrack());
                         }
                     });
@@ -68,31 +61,33 @@ export const useAudioPlayer = () => {
             audio.pause();
         }
 
-        // При размонтировании эффекта или изменении зависимостей помечаем прошлый поток как неактивный
         return () => {
             isEffectActive = false;
         };
     }, [trackUrl, isPlaying, dispatch]);
 
-    // 3. Синхронизация флага зацикливания трека (атрибут loop)
+    // 2. Синхронизация флага зацикливания трека
     useEffect(() => {
-        if (audioRef.current) {
-            audioRef.current.loop = isLooping;
+        if (globalAudioInstance) {
+            globalAudioInstance.loop = isLooping;
         }
     }, [isLooping]);
 
-    // 4. ЭФФЕКТ ДЛЯ ПЕРЕМОТКИ: Реагирует на клики по прогресс-барам из любого места приложения
+    // 3. ЭФФЕКТ ДЛЯ ПЕРЕМОТКИ
     useEffect(() => {
-        const audio = audioRef.current;
+        const audio = globalAudioInstance;
         if (!audio || seekTo === null) return;
 
-        audio.currentTime = seekTo; // Перематываем нативный плеер
-        dispatch(clearSeek());       // Сбрасываем флаг запроса перемотки в Redux
+        audio.currentTime = seekTo;
+        dispatch(clearSeek());
     }, [seekTo, dispatch]);
 
-    // 5. Подписка на нативные события прогресса аудиофайла и окончание трека
+    // 4. Подписку на события нативного плеера должен делать только ОДИН компонент,
+    // чтобы не спамить лишними диспатчами в стор из 10 мест одновременно.
+    // Традиционно события слушает только нижний плеер (AudioPlayerCore),
+    // поэтому вешаем слушатели только если хук вызван в глобальном контексте (или ограничиваем логику)
     useEffect(() => {
-        const audio = audioRef.current;
+        const audio = globalAudioInstance;
         if (!audio) return;
 
         const handleTimeUpdate = () => {
@@ -105,7 +100,6 @@ export const useAudioPlayer = () => {
         };
 
         const handleTrackEnded = () => {
-            // Если включен loop, браузер сам начнет сначала. Если выключен — переключаем трек в очереди
             if (!audio.loop) {
                 dispatch(nextTrack());
             }
@@ -124,7 +118,6 @@ export const useAudioPlayer = () => {
         };
     }, [trackUrl, dispatch]);
 
-    // Переключение состояния Воспроизведение / Пауза с центральной панели
     const handlePlayPauseToggle = () => {
         if (!currentTrackId || !trackUrl || !trackData) return;
         if (isPlaying) {
@@ -134,9 +127,8 @@ export const useAudioPlayer = () => {
         }
     };
 
-    // Перемотка трека по клику на центральный прогресс-бар в плеере
     const handleProgressClick = (e: MouseEvent<HTMLDivElement>) => {
-        const audio = audioRef.current;
+        const audio = globalAudioInstance;
         if (!audio || !duration) return;
 
         const rect = e.currentTarget.getBoundingClientRect();
@@ -145,12 +137,11 @@ export const useAudioPlayer = () => {
         audio.currentTime = clickPercent * duration;
     };
 
-    // Изменение уровня громкости
     const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = parseFloat(e.target.value);
         setVolume(value);
-        if (audioRef.current) {
-            audioRef.current.volume = value;
+        if (globalAudioInstance) {
+            globalAudioInstance.volume = value;
         }
     };
 
