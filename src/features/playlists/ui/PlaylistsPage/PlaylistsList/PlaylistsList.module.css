@@ -7,3 +7,7 @@
     margin: 24px 0 32px;
 }
 
+.items > * {
+    flex: 1 1 264px;
+
+}
