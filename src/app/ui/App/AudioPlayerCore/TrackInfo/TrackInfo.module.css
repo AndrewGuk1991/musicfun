@@ -1,34 +1,91 @@
+
 .trackInfoBlock {
     display: flex;
     align-items: center;
     gap: 24px;
     width: 400px;
+    overflow: hidden;
+}
+
+.coverWrapper {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
 }
 
 .cover {
-    width: 90px;
-    height: 90px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .textMeta {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+
+.scrollContainer {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .title {
+    display: inline-block;
     font-size: 18px;
     font-weight: 400;
-    white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.2s ease;
 }
 
 .artist {
+    display: inline-block;
     font-size: 16px;
     color: var(--color-gray-300);
-    white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.2s ease;
+}
+
+/* --- АНИМАЦИЯ БЕГУЩЕЙ СТРОКИ ПРИ НАВЕДЕНИИ МЫШКИ (Marquee) --- */
+.trackInfoBlock:hover .title,
+.trackInfoBlock:hover .artist {
+    /* Отключаем обрезку троеточием во время анимации, чтобы прокрутить строку целиком */
+    text-overflow: clip;
+    overflow: visible;
+    width: auto;
+
+    /* Запускаем плавное циклическое движение */
+    animation: marqueeScroll 6s linear infinite;
+    padding-right: 40px; /* Безопасный зазор перед повторением строки */
+}
+
+@keyframes marqueeScroll {
+    0% {
+        transform: translateX(0%);
+    }
+    40% {
+        /* Плавно сдвигаем текст влево.
+           Значение -40% оптимально прокрутит большинство длинных названий */
+        transform: translateX(-40%);
+    }
+    50% {
+        transform: translateX(-40%); /* Небольшая кинематографичная пауза в конце строки */
+    }
+    90% {
+        transform: translateX(0%); /* Плавное возвращение назад */
+    }
+    100% {
+        transform: translateX(0%);
+    }
 }
