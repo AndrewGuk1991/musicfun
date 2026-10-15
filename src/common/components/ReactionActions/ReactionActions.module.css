@@ -39,6 +39,10 @@
     color: var(--color-gray-300);
 }
 
+.hidden {
+    display: none !important;
+}
+
 .actionButton svg {
     display: block;
 }
