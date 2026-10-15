@@ -1,6 +1,6 @@
 .tracksHeader {
     display: grid;
-    grid-template-columns: 42px 52px 160px 1fr 150px 54px 110px;
+    grid-template-columns: 42px 52px 160px 1fr 138px 54px 110px;
     align-items: center;
     width: 100%;
     padding: 10px 20px;
@@ -32,7 +32,7 @@
     display: flex;
     align-items: center;
     justify-content: right;
-    padding-right: 16px;
+    padding-right: 8px;
 }
 
 /* CSS Часы со стрелками на 12 и 3 часа */
