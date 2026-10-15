@@ -4,6 +4,7 @@ import {PageNotFound} from "@/common/components";
 import {PlaylistsPage} from "@/features/playlists/ui";
 import {OAuthCallback, ProfilePage} from "@/features/auth/ui";
 import {Home} from "@/app/ui";
+import {PlaylistPage} from "@/features/playlists/ui/PlaylistPage/PlaylistPage.tsx";
 
 
 export const Path = {
@@ -12,6 +13,7 @@ export const Path = {
     CreatePlaylistForm: '/createPlaylistForm',
     UploadTrack: '/uploadTrack',
     Playlists: '/playlists',
+    PlaylistSingle: '/playlists/:id',
     Tracks: '/tracks',
     Profile: '/profile',
     OAuthRedirect: '/oauth/callback',
@@ -26,6 +28,7 @@ export const Routing = () => (
         <Route path={Path.Tracks} element={<TracksPage />} />
         <Route path={Path.Profile} element={<ProfilePage />} />
         <Route path={Path.OAuthRedirect} element={<OAuthCallback />} />
+        <Route path={Path.PlaylistSingle} element={<PlaylistPage />} />
         <Route path={Path.NotFound} element={<PageNotFound />} />
     </Routes>
 )
