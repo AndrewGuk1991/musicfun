@@ -4,7 +4,6 @@ import s from "./PlayerControls.module.css";
 import { toggleLoop, toggleShuffle } from "@/app/model/playerSlice.ts";
 import {Icon, PlayerTimeline} from "@/common/components";
 
-
 type PlayerControlsProps = {
     isPlaying: boolean;
     isLooping: boolean;
@@ -48,6 +47,8 @@ export const PlayerControls = ({
                 <button className={s.mainPlayBtn} onClick={onPlayPause} title={isPlaying ? "Stop" : "Play"}>
                     <div className={`${s.iconControl} ${isPlaying ? s.pause : s.play}`} />
                 </button>
+
+                {/*<PlayToggleButton bgColor={'var(--color-light-light)'} isPlaying={isPlaying} onPlayPause={onPlayPause} />*/}
 
                 <button className={s.controlBtn} onClick={onNextTrack} title="Следующий трек">
                     <Icon id={'icon-next'} />
