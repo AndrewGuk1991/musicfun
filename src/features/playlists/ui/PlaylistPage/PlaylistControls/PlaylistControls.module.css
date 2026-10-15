@@ -74,8 +74,8 @@
 
 .menuContainer .separator {
     display: block;
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
     background-color: var(--color-gray-400);
     border-radius: 50%;
     transition: background-color 0.2s ease;
