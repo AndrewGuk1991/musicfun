@@ -36,6 +36,11 @@ export const PlaylistDescription = ({ attributes, playlistId }: Props) => {
         removeReaction: removeReactionPlaylist,
     });
 
+    const handleBlockRedirect = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();  // Блокирует всплытие события к родителю <Link>
+        e.preventDefault();   // Блокирует нативное поведение ссылки браузера
+    };
+
     return (
         <>
             <p className={s.title}>{attributes.title}</p>
@@ -49,13 +54,19 @@ export const PlaylistDescription = ({ attributes, playlistId }: Props) => {
                 <span>Created {relativeDate}</span>
             </p>
 
-            <ReactionActions
-                currentReaction={currentReaction}
-                likesCount={attributes.likesCount}
-                isLoading={isAnyActionLoading}
-                onLikeClick={handleLikeClick}
-                onDislikeClick={handleDislikeClick}
-            />
+            <div
+                onClick={handleBlockRedirect}
+                onMouseDown={handleBlockRedirect}
+                onMouseUp={handleBlockRedirect}
+            >
+                <ReactionActions
+                    currentReaction={currentReaction}
+                    likesCount={attributes.likesCount}
+                    isLoading={isAnyActionLoading}
+                    onLikeClick={handleLikeClick}
+                    onDislikeClick={handleDislikeClick}
+                />
+            </div>
         </>
     )
 }
