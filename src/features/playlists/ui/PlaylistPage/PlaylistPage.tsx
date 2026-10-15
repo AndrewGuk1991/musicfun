@@ -131,7 +131,7 @@ export const PlaylistPage = () => {
 
             <div className={s.tracksSection}>
                 {tracks.length > 0 ? (
-                    <TracksListRows tracks={tracks} isLoading={isTracksLoading || isFetching} />
+                    <TracksListRows tracks={tracks} isLoading={isTracksLoading || isFetching} hideLikesCount={true} />
                 ) : (
                     !isTracksLoading && (
                         <div className={s.emptyState}>
