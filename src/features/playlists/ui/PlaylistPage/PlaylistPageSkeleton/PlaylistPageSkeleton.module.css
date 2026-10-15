@@ -1,0 +1,120 @@
+
+.container {
+    background: linear-gradient(180deg, #adbf22 5.09%, #121212 33.4%);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 28px 32px 100px 32px;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 46px;
+    align-items: center;
+}
+
+.coverWrapper {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.tracksSection {
+    margin-top: 32px;
+}
+
+/* --- СТИЛИ ЗАГЛУШЕК СKЕЛЕТОНА --- */
+.skeletonLine {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+.titleSkeleton {
+    width: 350px;
+    height: 44px;
+}
+
+.descSkeleton {
+    width: 500px;
+    height: 20px;
+}
+
+.metaSkeleton {
+    width: 280px;
+    height: 22px;
+    margin-top: 8px;
+}
+
+.searchSkeleton {
+    flex-grow: 1;
+    width: 100%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+}
+
+
+/* --- АНИМАЦИЯ ПУЛЬСАЦИИ (ЭФФЕКТ ЗАГРУЗКИ) --- */
+.pulse {
+    animation: pulseAnimation 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseAnimation {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* --- АДАПТИВ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА --- */
+@media (max-width: 767px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .coverWrapper {
+        width: 192px;
+        height: 192px;
+    }
+
+    .titleSkeleton, .descSkeleton, .metaSkeleton {
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+}
