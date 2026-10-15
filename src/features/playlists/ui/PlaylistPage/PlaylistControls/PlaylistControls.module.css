@@ -56,7 +56,7 @@
 }
 
 .activeDislike {
-    color: var(--color-gray-200) !important;
+    color: var(--color-crimson-400) !important;
 }
 
 .menuContainer {
