@@ -8,9 +8,10 @@ type TracksListRowsProps = {
     tracks: TrackData[];
     included?: TracksIncluded[];
     isLoading?: boolean;
+    hideLikesCount?: boolean
 };
 
-export const TracksListRows = ({ tracks, included = [] }: TracksListRowsProps) => {
+export const TracksListRows = ({ tracks, included = [], hideLikesCount }: TracksListRowsProps) => {
     // Выносим всю логику очередей и синхронизации в кастомный хук
     const { handlePlayTrack } = useTracksQueueSync({ tracks, included });
 
@@ -20,6 +21,7 @@ export const TracksListRows = ({ tracks, included = [] }: TracksListRowsProps) =
 
             {tracks.map((track, index) => (
                 <TrackRow
+                    hideLikesCount={hideLikesCount}
                     key={track.id}
                     index={index}
                     track={track}
