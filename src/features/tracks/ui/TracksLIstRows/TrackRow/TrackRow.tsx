@@ -1,12 +1,11 @@
-
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import s from "./TrackRow.module.css";
-import type { RootState } from "@/app/model/store.ts";
-import { useTrackMetadata, useTrackReactions } from "@/common/hooks";
-import { formatDuration } from "@/common/utils";
-import { PlayingBars, ReactionActions, TrackProgressBar } from "@/common/components";
-import type { TrackData, TracksIncluded } from "@/features/tracks/api/tracksApi.types.ts";
+import type {RootState} from "@/app/model/store.ts";
+import {useTrackMetadata, useTrackReactions} from "@/common/hooks";
+import {formatDuration} from "@/common/utils";
+import {Icon, PlayingBars, ReactionActions, TrackProgressBar} from "@/common/components";
+import type {TrackData, TracksIncluded} from "@/features/tracks/api/tracksApi.types.ts";
 import type {TrackItem} from "@/app/model/player.types.ts";
 import {pauseTrack, seekTrack} from "@/app/model/playerSlice.ts";
 
@@ -15,9 +14,10 @@ type TrackRowProps = {
     index: number;
     included?: TracksIncluded[];
     onPlay: (trackItem: TrackItem) => void;
+    hideLikesCount?: boolean
 };
 
-export const TrackRow = React.memo(({ track, index, included = [], onPlay }: TrackRowProps) => {
+export const TrackRow = React.memo(({track, index, included = [], onPlay, hideLikesCount}: TrackRowProps) => {
     const dispatch = useDispatch();
 
     // 1. Стабильные селекторы: меняются редко (только при клике на паузу или смене трека).
@@ -34,10 +34,16 @@ export const TrackRow = React.memo(({ track, index, included = [], onPlay }: Tra
     const duration = useSelector((state: RootState) => isCurrentTrack ? state.player.duration : 0);
 
     // Парсинг метаданных трека
-    const { coverSrc, artistName, truncatedTitle, relativeDate, audioUrl } = useTrackMetadata(track, included);
+    const {coverSrc, artistName, truncatedTitle, relativeDate, audioUrl} = useTrackMetadata(track, included);
 
     // Логика лайков/дизлайков и обращений к API
-    const { currentReaction, isAnyActionLoading, handleLikeClick, handleDislikeClick, likesCount } = useTrackReactions(track);
+    const {
+        currentReaction,
+        isAnyActionLoading,
+        handleLikeClick,
+        handleDislikeClick,
+        likesCount
+    } = useTrackReactions(track);
 
     // Вычисляем процент заполнения шкалы только для активной строки
     const progressPercent = isCurrentTrack && duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -82,14 +88,14 @@ export const TrackRow = React.memo(({ track, index, included = [], onPlay }: Tra
             {/* 1-я колонка: Описание (Анимация/Номер + Обложка + Название) */}
             <div className={s.description} onClick={handlePlayToggle}>
                 {isTrackPlayingNow ? (
-                    <PlayingBars />
+                    <PlayingBars/>
                 ) : (
                     <span className={`${s.number} ${isCurrentTrack ? s.activeNumber : ''}`}>
                         {index + 1}
                     </span>
                 )}
 
-                <img className={s.cover} src={coverSrc} alt="cover" />
+                <img className={s.cover} src={coverSrc} alt="cover"/>
                 <div className={s.info}>
                     <span className={`${s.title} ${isCurrentTrack ? s.activeTitle : ''}`}>
                         {truncatedTitle}
@@ -122,8 +128,19 @@ export const TrackRow = React.memo(({ track, index, included = [], onPlay }: Tra
                     isLoading={isAnyActionLoading}
                     onLikeClick={handleLikeClick}
                     onDislikeClick={handleDislikeClick}
+                    hideLikesCount={hideLikesCount}
                 />
             </div>
+
+            <span
+                className={s.ellipsis}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    alert('Открыть контекстное меню трека');
+                }}
+            >
+                <Icon id={'icon-ellipsis'}/>
+            </span>
 
             {/* 7-я колонка: Время трека в самом конце */}
             <span className={s.timing}>{displayDuration}</span>
