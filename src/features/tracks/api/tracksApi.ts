@@ -1,7 +1,7 @@
-import type {FetchTracksArgs, FetchTracksResponse} from "@/features/tracks/api/tracksApi.types.ts";
+import type {FetchTracksArgs, FetchTracksResponse, TrackData} from "@/features/tracks/api/tracksApi.types.ts";
 import { baseApi } from "@/app/api/baseApi.ts";
-import { withZodCatch } from "@/common/utils";
-import {fetchPlaylistTracksResponseSchema, fetchTracksResponseSchema} from "@/features/tracks/model/tracks.schemas.ts";
+import {errorToast, withZodCatch} from "@/common/utils";
+import {fetchPlaylistTracksResponseSchema, fetchTrackByIdResponseSchema, fetchTracksResponseSchema} from "@/features/tracks/model/tracks.schemas.ts";
 import type { ReactionUserResponse } from "@/common/types";
 import { reactionUserResponseSchema } from "@/common/schemas";
 
@@ -84,6 +84,32 @@ export const tracksApi = baseApi.injectEndpoints({
             ...withZodCatch(fetchTracksResponseSchema)
         }),
 
+        fetchTrackById: build.query<TrackData, string>({
+            query: (trackId) => ({
+                url: `playlists/tracks/${trackId}`,
+                method: 'GET'
+            }),
+
+            transformResponse: (baseResponse: unknown): TrackData => {
+
+                const result = fetchTrackByIdResponseSchema.safeParse(baseResponse);
+
+                if (!result.success) {
+
+                    errorToast('Zod error. Details in the console', result.error.issues);
+
+                    console.error('Zod validation issues:', result.error.issues);
+
+                    throw new Error('Schema validation failed');
+                }
+
+                return result.data.data;
+            },
+
+            providesTags: (_result, _error, trackId) => [{ type: 'Track' as const, id: trackId }],
+        }),
+
+
         likeTrack: build.mutation<ReactionUserResponse, string>({
             query: (trackId) => ({
                 url: `playlists/tracks/${trackId}/likes`,
@@ -119,5 +145,6 @@ export const {
     useLikeTrackMutation,
     useDislikeTrackMutation,
     useRemoveReactionTrackMutation,
-    useFetchPlaylistTracksQuery
+    useFetchPlaylistTracksQuery,
+    useFetchTrackByIdQuery
 } = tracksApi;
