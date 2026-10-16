@@ -74,3 +74,7 @@ export const fetchPlaylistTracksResponseSchema = z.object({
         totalCount: z.number().nonnegative()
     })
 });
+
+export const fetchTrackByIdResponseSchema = z.object({
+    data: trackDataSchema,
+});
