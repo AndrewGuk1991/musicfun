@@ -14,12 +14,23 @@ export const trackAttachmentSchema = z.object({
 
 export const trackAttributesSchema = z.object({
     title: z.string(),
-    addedAt: z.string(), // Ослабляем до обычной строки
+    addedAt: z.string(),
+
+    updatedAt: z.string().optional(),
+    lyrics: z.string().nullable().optional(),
+    releaseDate: z.string().nullable().optional(),
+
     likesCount: z.number().int().nonnegative().optional(),
+    dislikesCount: z.number().int().nonnegative().optional(),
+    currentUserReaction: currentUserReactionSchema,
+
     attachments: z.array(trackAttachmentSchema),
     images: imagesSchema,
     user: userSchema.optional(),
-    currentUserReaction: currentUserReactionSchema,
+
+    tags: z.array(z.any()).optional(),
+    artists: z.array(z.any()).optional(),
+
     isPublished: z.boolean().optional(),
     publishedAt: z.string().nullable(),
     duration: z.number().nonnegative(),
@@ -58,7 +69,7 @@ export const trackDataSchema = z.object({
     id: z.string(),
     type: z.literal('tracks'),
     attributes: trackAttributesSchema,
-    relationships: trackRelationshipsSchema,
+    relationships: trackRelationshipsSchema.optional(),
 })
 
 export const fetchTracksResponseSchema = z.object({
