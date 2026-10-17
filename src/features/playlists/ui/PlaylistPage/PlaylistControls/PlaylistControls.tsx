@@ -11,6 +11,7 @@ import {
 } from "@/features/playlists/api/playlists/playlistsApi.ts";
 
 import s from './PlaylistControls.module.css';
+import {MediaPlayButton} from "@/common/components";
 
 type PlaylistControlsProps = {
     playlistId: string;
@@ -61,17 +62,24 @@ export const PlaylistControls = ({
                 isLoading={isSearching}
             />
 
-            {hasTracks && isCurrentPlaylistPlayingAndActive ? (
-                <button className={s.playPauseBtn} onClick={onPlayPlaylist}>
-                    <Icon id={'icon-btn-pause'} height={60} width={60} viewBox={'0 0 60 60'}/>
-                </button>
-            ) : (
-                hasTracks && (
-                    <button className={s.playPauseBtn} onClick={onPlayPlaylist}>
-                        <Icon id={'icon-btn-play'} height={60} width={60} viewBox={'0 0 60 60'}/>
-                    </button>
-                )
-            )}
+            {/*{hasTracks && isCurrentPlaylistPlayingAndActive ? (*/}
+            {/*    <button className={s.playPauseBtn} onClick={onPlayPlaylist}>*/}
+            {/*        <Icon id={'icon-btn-pause'} height={60} width={60} viewBox={'0 0 60 60'}/>*/}
+            {/*    </button>*/}
+            {/*) : (*/}
+            {/*    hasTracks && (*/}
+            {/*        <button className={s.playPauseBtn} onClick={onPlayPlaylist}>*/}
+            {/*            <Icon id={'icon-btn-play'} height={60} width={60} viewBox={'0 0 60 60'}/>*/}
+            {/*        </button>*/}
+            {/*    )*/}
+            {/*)}*/}
+
+            <MediaPlayButton
+                isPlaying={isCurrentPlaylistPlayingAndActive}
+                onToggle={onPlayPlaylist}
+                isDisabled={!hasTracks}
+            />
+
 
             <button
                 className={`${s.actionBtn} ${currentPlaylistReaction === CurrentUserReaction.Like ? s.activeLike : ''}`}

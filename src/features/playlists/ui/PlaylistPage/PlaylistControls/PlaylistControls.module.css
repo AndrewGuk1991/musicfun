@@ -7,27 +7,6 @@
     margin-bottom: 24px;
 }
 
-.playPauseBtn {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-}
-
-.playPauseBtn:hover {
-    transform: scale(1.06);
-    opacity: 0.9;
-}
-
-.playPauseBtn:active {
-    transform: scale(0.96);
-}
-
 .actionBtn {
     background: none;
     border: none;
