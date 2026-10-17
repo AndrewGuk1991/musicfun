@@ -10,7 +10,7 @@ import {
     useLikeTrackMutation,
     useRemoveReactionTrackMutation
 } from "@/features/tracks/api/tracksApi.ts";
-import {truncateText} from "@/common/utils";
+import {trimToMaxLength} from "@/common/utils";
 
 type Props = {
     track: TrackData
@@ -41,7 +41,7 @@ export const TrackItem = ({track, included = []}: Props) => {
 
     const artistName = artistData?.attributes?.name || "Unknown Artist"
 
-    const truncatedTitle = truncateText(track.attributes.title, 30);
+    const truncatedTitle = trimToMaxLength(track.attributes.title, 30);
 
     return (
         <div className={s.item}>

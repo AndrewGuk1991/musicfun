@@ -1,7 +1,7 @@
 // features/tracks/lib/getTrackMetadata.ts
 import type { TrackData, TracksIncluded } from "@/features/tracks/api/tracksApi.types.ts";
 import defaultCover from "@/assets/images/default-playlist-cover.png";
-import { truncateText } from "@/common/utils";
+import {trimToMaxLength} from "@/common/utils";
 
 export const getTrackMetadata = (track: TrackData, included: TracksIncluded[]) => {
     // 1. Поиск обложки (миниатюры) трека
@@ -17,7 +17,7 @@ export const getTrackMetadata = (track: TrackData, included: TracksIncluded[]) =
     }
 
     // 3. Форматирование заголовка
-    const truncatedTitle = truncateText(track.attributes.title, 30);
+    const truncatedTitle = trimToMaxLength(track.attributes.title, 30);
 
     // 4. Поиск подходящего аудиофайла в аттачментах
     const audioAttachment = track.attributes.attachments?.find(
