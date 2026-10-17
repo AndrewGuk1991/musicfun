@@ -1,9 +1,17 @@
-import type {FetchTracksArgs, FetchTracksResponse, TrackData} from "@/features/tracks/api/tracksApi.types.ts";
-import { baseApi } from "@/app/api/baseApi.ts";
-import {errorToast, withZodCatch} from "@/common/utils";
-import {fetchPlaylistTracksResponseSchema, fetchTrackByIdResponseSchema, fetchTracksResponseSchema} from "@/features/tracks/model/tracks.schemas.ts";
-import type { ReactionUserResponse } from "@/common/types";
-import { reactionUserResponseSchema } from "@/common/schemas";
+import type {
+    FetchTrackByIdResponse,
+    FetchTracksArgs,
+    FetchTracksResponse
+} from "@/features/tracks/api/tracksApi.types.ts";
+import {baseApi} from "@/app/api/baseApi.ts";
+import {withZodCatch} from "@/common/utils";
+import {
+    fetchPlaylistTracksResponseSchema,
+    fetchTrackByIdResponseSchema,
+    fetchTracksResponseSchema
+} from "@/features/tracks/model/tracks.schemas.ts";
+import type {ReactionUserResponse} from "@/common/types";
+import {reactionUserResponseSchema} from "@/common/schemas";
 
 export const tracksApi = baseApi.injectEndpoints({
     endpoints: build => ({
@@ -84,29 +92,15 @@ export const tracksApi = baseApi.injectEndpoints({
             ...withZodCatch(fetchTracksResponseSchema)
         }),
 
-        fetchTrackById: build.query<TrackData, string>({
+        fetchTrackById: build.query<FetchTrackByIdResponse, string>({
             query: (trackId) => ({
                 url: `playlists/tracks/${trackId}`,
                 method: 'GET'
             }),
 
-            transformResponse: (baseResponse: unknown): TrackData => {
+            ...withZodCatch(fetchTrackByIdResponseSchema),
 
-                const result = fetchTrackByIdResponseSchema.safeParse(baseResponse);
-
-                if (!result.success) {
-
-                    errorToast('Zod error. Details in the console', result.error.issues);
-
-                    console.error('Zod validation issues:', result.error.issues);
-
-                    throw new Error('Schema validation failed');
-                }
-
-                return result.data.data;
-            },
-
-            providesTags: (_result, _error, trackId) => [{ type: 'Track' as const, id: trackId }],
+            providesTags: (_result, _error, trackId) => [{ type: 'Track' as const, id: trackId }]
         }),
 
 
