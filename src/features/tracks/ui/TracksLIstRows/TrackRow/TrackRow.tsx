@@ -8,6 +8,8 @@ import {Icon, PlayingBars, ReactionActions, TrackProgressBar} from "@/common/com
 import type {TrackData, TracksIncluded} from "@/features/tracks/api/tracksApi.types.ts";
 import type {TrackItem} from "@/app/model/player.types.ts";
 import {pauseTrack, seekTrack} from "@/app/model/playerSlice.ts";
+import {useNavigate} from "react-router";
+import {Path} from "@/common/routing";
 
 type TrackRowProps = {
     track: TrackData;
@@ -19,6 +21,7 @@ type TrackRowProps = {
 
 export const TrackRow = React.memo(({track, index, included = [], onPlay, hideLikesCount}: TrackRowProps) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // 1. Стабильные селекторы: меняются редко (только при клике на паузу или смене трека).
     // Пассивные строки больше не будут перерисовываться при изменении секунд в плеере.
@@ -82,6 +85,11 @@ export const TrackRow = React.memo(({track, index, included = [], onPlay, hideLi
         dispatch(seekTrack(targetSeconds));
     };
 
+    const handleTrackRedirect = (e: React.MouseEvent<HTMLSpanElement>) => {
+        e.stopPropagation();
+        navigate(Path.TrackSingle.replace(':id', track.id));
+    };
+
     return (
         <div className={`${s.item} ${isCurrentTrack ? s.activeItem : ''}`}>
 
@@ -134,10 +142,7 @@ export const TrackRow = React.memo(({track, index, included = [], onPlay, hideLi
 
             <span
                 className={s.ellipsis}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    alert('Открыть контекстное меню трека');
-                }}
+                onClick={handleTrackRedirect}
             >
                 <Icon id={'icon-ellipsis'}/>
             </span>
