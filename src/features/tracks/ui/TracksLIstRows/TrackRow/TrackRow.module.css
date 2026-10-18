@@ -92,34 +92,6 @@
     justify-content: flex-start;
 }
 
-.ellipsis {
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    cursor: pointer;
-    flex-shrink: 0;
-    background: none;
-    border: none;
-
-    color: #ABA4A3;
-
-    transition: color 0.2s ease, transform 0.1s ease;
-}
-
-
-.ellipsis:hover {
-    color: var(--color-light-light);
-    background-color: transparent;
-}
-
-.ellipsis:active {
-    transform: scale(0.95);
-}
-
 
 .timing {
     font-size: 18px;

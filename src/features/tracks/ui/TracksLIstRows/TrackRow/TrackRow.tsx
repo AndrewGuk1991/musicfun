@@ -4,7 +4,7 @@ import s from "./TrackRow.module.css";
 import type {RootState} from "@/app/model/store.ts";
 import {useTrackMetadata, useTrackReactions} from "@/common/hooks";
 import {formatDuration} from "@/common/utils";
-import {Icon, PlayingBars, ReactionActions, TrackProgressBar} from "@/common/components";
+import {PlayingBars, ReactionActions, TrackEllipsisButton, TrackProgressBar} from "@/common/components";
 import type {TrackData, TracksIncluded} from "@/features/tracks/api/tracksApi.types.ts";
 import type {TrackItem} from "@/app/model/player.types.ts";
 import {pauseTrack, seekTrack} from "@/app/model/playerSlice.ts";
@@ -140,12 +140,7 @@ export const TrackRow = React.memo(({track, index, included = [], onPlay, hideLi
                 />
             </div>
 
-            <span
-                className={s.ellipsis}
-                onClick={handleTrackRedirect}
-            >
-                <Icon id={'icon-ellipsis'}/>
-            </span>
+            <TrackEllipsisButton handleTrack={handleTrackRedirect} />
 
             {/* 7-я колонка: Время трека в самом конце */}
             <span className={s.timing}>{displayDuration}</span>
