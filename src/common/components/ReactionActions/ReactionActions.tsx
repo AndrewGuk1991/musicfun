@@ -11,6 +11,11 @@ type Props = {
     onLikeClick: () => void;
     onDislikeClick: () => void;
     hideLikesCount?: boolean
+    widthLike?: number
+    heightLike?: number
+    widthDislike?: number
+    heightDislike?: number
+    viewBox?: string
 };
 
 export const ReactionActions = memo(({
@@ -19,7 +24,12 @@ export const ReactionActions = memo(({
                                          isLoading,
                                          onLikeClick,
                                          onDislikeClick,
-                                         hideLikesCount = false
+                                         hideLikesCount = false,
+                                         widthDislike,
+                                         heightLike,
+                                         heightDislike,
+                                         widthLike,
+                                         viewBox
                                      }: Props) => {
     return (
         <div className={s.actions}>
@@ -29,7 +39,11 @@ export const ReactionActions = memo(({
                 onClick={onLikeClick}
                 disabled={isLoading}
             >
-                <Icon id={currentReaction === CurrentUserReaction.Like ? 'icon-like-filled' : 'icon-like'}/>
+                <Icon id={currentReaction === CurrentUserReaction.Like ? 'icon-like-filled' : 'icon-like'}
+                      width={widthLike}
+                      height={heightLike}
+                      viewBox={viewBox}
+                />
                 <span className={`${s.likesCount} ${hideLikesCount ? s.hidden : ''}`}>
                     {likesCount}
                 </span>
@@ -41,7 +55,11 @@ export const ReactionActions = memo(({
                 onClick={onDislikeClick}
                 disabled={isLoading}
             >
-                <Icon id='icon-dislike'/>
+                <Icon id='icon-dislike'
+                      width={widthDislike}
+                      height={heightDislike}
+                      viewBox={viewBox}
+                />
             </button>
         </div>
     );
