@@ -89,3 +89,13 @@ export const fetchPlaylistTracksResponseSchema = z.object({
 export const fetchTrackByIdResponseSchema = z.object({
     data: trackDataSchema,
 });
+
+export const editTrackSchema = z.object({
+    data: z.object({
+        type: z.literal("tracks"),
+        attributes: z.object({
+            title: z.string().min(1, "Title is required").max(100, "Too long title"),
+            lyrics: z.string().nullable().optional(),
+        })
+    })
+});
