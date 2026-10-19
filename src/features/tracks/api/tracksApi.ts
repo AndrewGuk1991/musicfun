@@ -129,6 +129,17 @@ export const tracksApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: (_result, _error, trackId) => [{ type: 'Track', id: trackId }],
             ...withZodCatch(reactionUserResponseSchema),
+        }),
+        updateTrack: build.mutation<any, { trackId: string; body: any }>({
+            query: ({ trackId, body }) => ({
+                url: `playlists/tracks/${trackId}`,
+                method: 'PUT',
+                body
+            }),
+            invalidatesTags: (_result, _error, { trackId }) => [
+                { type: 'Track' as const, id: trackId },
+                { type: 'Track' as const, id: 'LIST' }
+            ]
         })
     })
 })
@@ -140,5 +151,6 @@ export const {
     useDislikeTrackMutation,
     useRemoveReactionTrackMutation,
     useFetchPlaylistTracksQuery,
-    useFetchTrackByIdQuery
+    useFetchTrackByIdQuery,
+    useUpdateTrackMutation,
 } = tracksApi;
