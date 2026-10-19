@@ -1,5 +1,6 @@
 
 import {
+    editTrackSchema,
     fetchTrackByIdResponseSchema,
     type fetchTracksResponseSchema, trackAttachmentSchema, trackAttributesSchema,
     trackDataSchema, trackRelationshipsSchema,
@@ -20,6 +21,8 @@ export type TrackRelationships = z.infer<typeof trackRelationshipsSchema>
 export type TrackAttachment = z.infer<typeof trackAttachmentSchema>
 
 export type FetchTrackByIdResponse = z.infer<typeof fetchTrackByIdResponseSchema>;
+
+export type FormData = z.infer<typeof editTrackSchema>;
 
 // Arguments
 export type FetchTracksArgs = {
